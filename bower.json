@@ -1,0 +1,6 @@
+{
+    "name": "feedbackAPI",
+    "version":  "0.0.1",
+    "description":  "API feedback enablement and CMS",
+    "dependencies": {}
+}
