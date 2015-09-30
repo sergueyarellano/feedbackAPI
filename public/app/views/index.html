@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <title>Workflow!</title>
+    <!-- For Angular Routing -->
+    <base href='/'>
+    <!-- CSS -->
+    <!-- load bootstrap here -->
+    <!-- we'll load the css file in the gulp section -->
+    <!-- JS / LIBS -->
+    <!-- load angular and angular-route here -->
+    <!-- APP -->
+    <script src="app/controllers/mainCtrl.js"></script>
+    <script src="app/app.routes.js"></script>
+    <script src="app/app.js"></script>
+  </head>
+  <body class="container" ng-app="myApp" ng-controller="mainController as main">
+    <div class="jumbotron text-center">
+
+      <h1>{{ main.message }}</h1>
+    </div>
+    <div ng-view></div>
+  </body>
+</html>

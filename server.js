@@ -1,3 +1,5 @@
+(function() {
+'use  strict';
 // CALL THE PACKAGES ---------------------
 var express = require('express');
 var app = express();
@@ -6,7 +8,6 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 
 var config = require('./config');
-var FForm = require('./app/models/form');
 //   NOTES:
 // - express is the Node framework.
 // - morgan allows us to log all requests to the console so we can see exactly what is going on.
@@ -49,4 +50,4 @@ app.use('/api', apiRoutes);
 app.listen(config.port);
 console.log('» Magic happens on port ' + config.port);
 
-
+})();

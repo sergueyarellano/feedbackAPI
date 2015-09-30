@@ -5,9 +5,11 @@ module.exports = function(app, express) {
 
 	// get an instance of the express router
 var apiRouter = express.Router();
-
+var i = 1;
+var date = new Date();
 apiRouter.use(function(req, res, next) {
-  console.log('Somebody just came to our app!')
+  console.log('» ' + i + ' connections to endpoint /api/* » ' + date)
+  i++;
   next();
 });
 // test route to make sure everything is working
