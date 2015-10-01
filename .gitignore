@@ -3,3 +3,4 @@ node_modules/
 responseOpinator*.json
 *Opinator*
 getdataformodal.json
+npm-debug*

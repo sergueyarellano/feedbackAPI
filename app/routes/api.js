@@ -21,7 +21,7 @@ apiRouter.get('/', function(req,res) {
 // on routes tha end in /forms
 apiRouter.route('/forms')
   .post(function(req, res) {
-    var form = new FForm.form();
+    var form = new Models.fform();
 
     // set the form information (comes from the request)
     form.page = req.body.page
@@ -67,24 +67,24 @@ apiRouter.route('/forms')
   })
 
   .get(function(req, res) {
-    
+
     if (req.params.id) {
-      FForm.form.find(function(err, forms) {
+
+      Models.fforms.find(function(err, forms) {
       if (err) res.send(err);
-
-      // filter para usuario
-
-    });
-      } else {
-        res.json(forms)
-      }
-
-    
+      res.json(forms)
+      })
+    } else {
+      Models.fforms.find(function(err, forms) {
+      if (err) res.send(err);
+      res.json(forms)
+      })
+    }
   });
 
 apiRouter.route('/forms/:form_id')
   .get(function(req, res) {
-    FForm.findById(req.params.form_id, function(err, form) {
+    Models.fforms.findById(req.params.form_id, function(err, form) {
       if (err) res.send(err);
 
       // return that form
@@ -93,7 +93,7 @@ apiRouter.route('/forms/:form_id')
   })
 
   .put(function(req, res) {
-    FForm.findById(req.params.form_id, function(err, form) {
+    Models.fforms.findById(req.params.form_id, function(err, form) {
       if (err) res.send(err);
 // MUST REMAKE THE REQUESTS HERE AS I DID ON POST METHOD
       // update the form only if it's new
@@ -115,7 +115,7 @@ apiRouter.route('/forms/:form_id')
   })
 
   .delete(function(req, res) {
-    FForm.remove({
+    Models.fforms.remove({
       _id: req.params.form_id
 
     }, function(err, form) {

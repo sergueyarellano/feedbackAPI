@@ -1,13 +1,13 @@
+'use strict';
 (function() {
-'use  strict';
 // CALL THE PACKAGES ---------------------
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-var morgan = require('morgan');
-var mongoose = require('mongoose');
+var express     = require('express'),
+    app         = express(),
+    bodyParser  = require('body-parser'),
+    morgan      = require('morgan'),
+    mongoose    = require('mongoose'),
+    config      = require('./config');
 
-var config = require('./config');
 //   NOTES:
 // - express is the Node framework.
 // - morgan allows us to log all requests to the console so we can see exactly what is going on.
