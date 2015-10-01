@@ -6,6 +6,7 @@ var express     = require('express'),
     bodyParser  = require('body-parser'),
     morgan      = require('morgan'),
     mongoose    = require('mongoose'),
+    path        = require('path'),
     config      = require('./config');
 
 //   NOTES:
@@ -35,11 +36,13 @@ app.use(function(req, res, next) {
 // log all the requests to the console
 app.use(morgan('dev'));
 
+app.use(express.static(__dirname + '/public'));
+
 // ROUTES FOR OUR API
 // ========================================
 // basic route for the home page
 app.get('/', function(req, res) {
-  res.send('Welcome to the homepage');
+  res.sendFile(path.join(__dirname + '/public/app/views/index.html'))
 });
 
 var apiRoutes = require('./app/routes/api')(app, express);
