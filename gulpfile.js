@@ -21,7 +21,7 @@ gulp.task('css', function() {
 });
 
 gulp.task('js', function() {
-  return gulp.src(['server.js', 'public/app/*js', 'public/app/**/*.js', 'app/*.js', 'app/**/*.js'])
+  return gulp.src(['server.js', 'public/app/*js', 'public/app/**/*.js'])
     .pipe(jshint())                           // hint (optional)
     .pipe(jscs())                             // enforce style guide
     .pipe(stylish.combineWithHintResults())   // combine with jshint results
@@ -44,7 +44,7 @@ gulp.task('watch', function() {
   gulp.watch('public/assets/css/*.styl', ['css']);
 
   // watch js files and run lint and run js and angular tasks
-  gulp.watch(['server.js', 'public/app/*.js', 'public/app/**/*.js', './gulpfile.js', 'app/*.js', 'app/**/*.js'], ['js', 'angular']);
+  gulp.watch(['server.js', 'public/app/*.js', 'public/app/**/*.js'], ['js', 'angular']);
 });
 
 gulp.task('nodemon', function () {

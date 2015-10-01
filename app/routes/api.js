@@ -1,5 +1,5 @@
 var bodyParser = require('body-parser');
-var FForm = require('../models/form');
+var Models = require('../models/form');
 
 module.exports = function(app, express) {
 
@@ -21,7 +21,7 @@ apiRouter.get('/', function(req,res) {
 // on routes tha end in /forms
 apiRouter.route('/forms')
   .post(function(req, res) {
-    var form = new FForm();
+    var form = new FForm.form();
 
     // set the form information (comes from the request)
     form.page = req.body.page
@@ -67,12 +67,19 @@ apiRouter.route('/forms')
   })
 
   .get(function(req, res) {
-    FForm.find(function(err, forms) {
+    
+    if (req.params.id) {
+      FForm.form.find(function(err, forms) {
       if (err) res.send(err);
 
-      // return all the forms
-      res.json(forms);
+      // filter para usuario
+
     });
+      } else {
+        res.json(forms)
+      }
+
+    
   });
 
 apiRouter.route('/forms/:form_id')
