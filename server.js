@@ -38,6 +38,7 @@ app.use(morgan('dev'));
 
 app.use(express.static(__dirname + '/public'));
 
+var ser = 1;
 // ROUTES FOR OUR API
 // ========================================
 // basic route for the home page
