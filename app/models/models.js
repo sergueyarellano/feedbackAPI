@@ -21,15 +21,19 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
 		starSelected: { type: Number, min: 1, max: 5, default: null },
 
 		questions: [ { type: Schema.Types.ObjectId, ref: 'OpLiteral', select: false } ],
-		saturation: { type: Number, min: 0, max: 30,  select: false },
+		saturation: { type: Number, min: 0, max: 30,  select: false , default: 30 },
 		randomness: { type: Number, min: 0, max: 100, default: 100, select: false }
 
   }),
 
   LiteralSchema = new Schema({
+  	text: [ { type: String, default: String } ],
+  	_creator: { type: Number, ref: 'OpForm' }
 
-  	literal: [ { type: String } ]
+  }),
 
+  PersonSchema = new Schema({
+  	// to implement
   });
 
 // http://stackoverflow.com/questions/26861417/set-default-values-to-mongoose-arrays-in-node-js

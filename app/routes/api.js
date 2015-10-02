@@ -1,5 +1,5 @@
 var bodyParser = require('body-parser');
-var Models = require('../models/form');
+var Models = require('../models/models');
 
 module.exports = function(app, express) {
 
@@ -21,47 +21,33 @@ apiRouter.get('/', function(req,res) {
 // on routes tha end in /forms
 apiRouter.route('/forms')
   .post(function(req, res) {
-    var form = new Models.fform();
 
-    // set the form information (comes from the request)
-    form.page = req.body.page
-    form.newPage = req.body.page
-
-    form.opiName = req.body.opiName
-    form.mustShowOpi = req.body.mustShowOpi
-    form.url = req.body.url
-    form.urlPullButton = req.body.url
-    form.urlWidget = req.body.
-    form.starSelected = req.body.
-
-    // form.name = req.body.name;
-    // form.type = req.body.type;
-    // form.stars = req.body.stars;
-
-    // if a key has multiple values separated by commas
-    // iterate over the values and push them
-    // var img = req.body.imgs.split(',');
-    // var tmp = req.body.templatesURL.split(',');
-    // var carry = req.body.carrys.split(',');
-
-    // for (i=0; i<img.length;i++) {
-    //   form.imgs.push(img[i]);
-    // }
-    // for (i=0; i<tmp.length;i++) {
-    //   form.templatesURL.push(tmp[i]);
-    // }
-    // for (i=0; i<carry.length;i++) {
-    //   form.carrys.push(carry[i]);
-    // }
-
-    // save the form and check for errors
+    var form = new Models.fforms();
+    form.opiName = req.body.opiName;
+    literals._creator = form._id;
     form.save(function(err) {
       if (err) {
         if (err.code == 11000)
-          return res.json({ success: false, message: 'A form with that name already exists'});
-        else
-          return res.send(err)
+          return res.json({ success: false, message: 'A form with that name already exists' });
       }
+
+      var literals = new Models.literals();
+      var lit = req.body.text.split(',');
+      
+      for (i=0;i< lit.length;i++) { 
+        literals.text.push(lit[i]);
+      }
+      
+      form.questions.push(literals);
+
+        literals.save(function(err) {
+          if (err) {
+            console.log(literals._creator);
+            console.log(form);
+            return res.send(err);
+          }
+          
+        });
       res.json({message: 'Form created!'})
     });
   })
@@ -75,10 +61,10 @@ apiRouter.route('/forms')
       res.json(forms)
       })
     } else {
-      Models.fforms.find(function(err, forms) {
-      if (err) res.send(err);
-      res.json(forms)
-      })
+
+      Models.fforms.find()
+      .populate()
+      .exec();
     }
   });
 
