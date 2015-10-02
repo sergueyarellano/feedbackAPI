@@ -1,0 +1,139 @@
+// Color variables (appears count calculates by raw css)
+@color0: #ffffff; // Appears 8 times
+@color1: #555555; // Appears 3 times
+@color2: #006597; // Appears 3 times
+@color3: #0078d2; // Appears 2 times
+
+
+@media {
+	(min-width {
+		&amp;:992px) {
+			and {
+				(max-width {
+					&amp;:1199px) {
+					}
+				}
+			}
+		}
+		&amp;:768px) {
+			and {
+				(max-width {
+					&amp;:991px) {
+					}
+				}
+			}
+		}
+	}
+	(max-width {
+		&amp;:767px) {
+			.inner-bg { padding: 60px 0 110px 0;
+		}
+		&amp;:415px) {
+			h1, h2 { font-size: 32px;
+		}
+	}
+}
+body {
+	color: #888888;
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: 300;
+	line-height: 30px;
+	text-align: center;
+}
+strong {
+	font-weight: 500;
+}
+a {
+	-moz-transition: all .3s;
+	-ms-transition: all .3s;
+	-o-transition: all .3s;
+	-webkit-transition: all .3s;
+	color: @color2;
+	text-decoration: none;
+	transition: all .3s;
+	&amp;:hover {
+		-moz-transition: all .3s;
+		-ms-transition: all .3s;
+		-o-transition: all .3s;
+		-webkit-transition: all .3s;
+		color: @color2;
+		text-decoration: none;
+		transition: all .3s;
+	}
+	&amp;:focus {
+		-moz-transition: all .3s;
+		-ms-transition: all .3s;
+		-o-transition: all .3s;
+		-webkit-transition: all .3s;
+		color: @color2;
+		text-decoration: none;
+		transition: all .3s;
+	}
+}
+footer {
+	a {
+		color: @color0;
+	}
+}
+h1 {
+	color: @color1;
+	font-size: 38px;
+	font-weight: 100;
+	line-height: 50px;
+	margin-top: 10px;
+}
+h2 {
+	color: @color1;
+	font-size: 38px;
+	font-weight: 100;
+	line-height: 50px;
+	margin-top: 10px;
+}
+h3 {
+	color: @color1;
+	font-size: 22px;
+	font-weight: 300;
+	line-height: 30px;
+}
+img {
+	max-width: 100%;
+}
+ {
+	&amp;::-moz-selection {
+		background: @color3;
+		color: @color0;
+		text-shadow: none;
+	}
+	&amp;::selection {
+		background: @color3;
+		color: @color0;
+		text-shadow: none;
+	}
+}
+.inner-bg {
+	padding: 100px 0 170px 0;
+}
+.top-content {
+	.text {
+		color: @color0;
+		h1 {
+			color: @color0;
+		}
+	}
+	.description {
+		margin: 20px 0 10px 0;
+		p {
+			opacity: 0.8;
+		}
+		a {
+			color: @color0;
+			&amp;:hover {
+				border-bottom: 1px dotted @color0;
+			}
+			&amp;:focus {
+				border-bottom: 1px dotted @color0;
+			}
+		}
+	}
+}

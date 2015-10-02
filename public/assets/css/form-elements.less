@@ -1,0 +1,178 @@
+// Color variables (appears count calculates by raw css)
+@color0: #ffffff; // Appears 13 times
+@color1: #0078d2; // Appears 4 times
+@color2: #777777; // Appears 2 times
+@color3: #444444; // Appears 2 times
+@color4: #555555; // Appears 2 times
+
+
+// Height variables (appears count calculates by raw css)
+@height1: 50px; // Appears 2 times
+
+.form-box {
+	margin-top: 35px;
+}
+.form-top {
+	-moz-border-radius: 4px 4px 0 0;
+	-webkit-border-radius: 4px 4px 0 0;
+	background: @color3;
+	background: rgba(0, 0, 0, 0.35);
+	border-radius: 4px 4px 0 0;
+	overflow: hidden;
+	padding: 0 25px 15px 25px;
+	text-align: left;
+}
+.form-top-left {
+	float: left;
+	padding-top: 25px;
+	width: 75%;
+	h3 {
+		color: @color0;
+		margin-top: 0;
+	}
+	p {
+		color: @color0;
+		opacity: 0.8;
+	}
+}
+.form-top-right {
+	color: @color0;
+	float: left;
+	font-size: 66px;
+	line-height: 100px;
+	opacity: 0.3;
+	padding-top: 5px;
+	text-align: right;
+	width: 25%;
+}
+.form-bottom {
+	-moz-border-radius: 0 0 4px 4px;
+	-webkit-border-radius: 0 0 4px 4px;
+	background: @color3;
+	background: rgba(0, 0, 0, 0.3);
+	border-radius: 0 0 4px 4px;
+	padding: 25px 25px 30px 25px;
+	text-align: left;
+	form {
+		textarea {
+			height: 100px;
+		}
+		button.btn {
+			width: 50%;
+		}
+		.input-error {
+			border-color: #660000;
+		}
+	}
+}
+input[type="text"], input[type="password"], textarea, textarea.form-control  {
+	-moz-border-radius: 4px;
+	-moz-box-shadow: none;
+	-moz-transition: all .3s;
+	-ms-transition: all .3s;
+	-o-transition: all .3s;
+	-webkit-border-radius: 4px;
+	-webkit-box-shadow: none;
+	-webkit-transition: all .3s;
+	background: @color4;
+	border-radius: 4px;
+	border: 3px solid @color4;
+	box-shadow: none;
+	color: @color0;
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: 300;
+	height: @height1;
+	line-height: @height1;
+	margin: 0;
+	opacity: 0.8;
+	padding: 0 20px;
+	transition: all .3s;
+	vertical-align: middle;
+}
+textarea {
+	line-height: 30px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+textarea.form-control {
+	line-height: 30px;
+	padding-bottom: 10px;
+	padding-top: 10px;
+}
+input[type="text"]:focus, input[type="password"]:focus, textarea:focus, textarea.form-control:focus  {
+	-moz-box-shadow: none;
+	-webkit-box-shadow: none;
+	background: @color2;
+	border: 3px solid @color2;
+	box-shadow: none;
+	opacity: 0.8;
+	outline: 0;
+}
+input[type="text"]:-moz-placeholder, input[type="password"]:-moz-placeholder, textarea:-moz-placeholder, textarea.form-control:-moz-placeholder  {
+	color: @color0;
+}
+input[type="text"]:-ms-input-placeholder, input[type="password"]:-ms-input-placeholder, textarea:-ms-input-placeholder, textarea.form-control:-ms-input-placeholder  {
+	color: @color0;
+}
+input[type="text"]::-webkit-input-placeholder, input[type="password"]::-webkit-input-placeholder, textarea::-webkit-input-placeholder, textarea.form-control::-webkit-input-placeholder  {
+	color: @color0;
+}
+button.btn {
+	-moz-border-radius: 4px;
+	-moz-box-shadow: none;
+	-moz-transition: all .3s;
+	-ms-transition: all .3s;
+	-o-transition: all .3s;
+	-webkit-border-radius: 4px;
+	-webkit-box-shadow: none;
+	-webkit-transition: all .3s;
+	background: @color1;
+	border-radius: 4px;
+	border: 0;
+	box-shadow: none;
+	color: @color0;
+	font-family: 'Roboto', sans-serif;
+	font-size: 16px;
+	font-weight: 300;
+	height: @height1;
+	line-height: @height1;
+	margin-left: 25%;
+	opacity: 0.8;
+	padding: 0 20px;
+	text-shadow: none;
+	transition: all .3s;
+	vertical-align: middle;
+	&amp;:hover {
+		color: @color0;
+		opacity: 0.6;
+	}
+	&amp;:active {
+		-moz-box-shadow: none;
+		-webkit-box-shadow: none;
+		box-shadow: none;
+		color: @color0;
+		opacity: 0.6;
+		outline: 0;
+		focus {
+			background: @color1;
+			color: @color0;
+			opacity: 0.6;
+			outline: 0;
+		}
+	}
+	&amp;:focus {
+		background: @color1;
+		color: @color0;
+		opacity: 0.6;
+		outline: 0;
+	}
+}
+button.btn.active {
+	&amp;:focus {
+		background: @color1;
+		color: @color0;
+		opacity: 0.6;
+		outline: 0;
+	}
+}
