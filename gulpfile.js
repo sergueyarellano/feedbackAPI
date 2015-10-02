@@ -83,8 +83,10 @@ gulp.task('watch', function() {
   livereload.listen();
   // watch the less file and run the css task
   gulp.watch('public/assets/css/*.less', ['css', 'inject']);
+  livereload.listen();
   gulp.watch(['public/app/views/*.html', 'public/app/views/**/*.html'],['html']);
   gulp.watch(['bower.json'],  ['wiredep']);
+  livereload.listen();
   gulp.watch(['server.js', 'public/app/*.js', 'public/app/**/*.js', 'app/models/*.js'], ['js', 'angular', 'inject']);
 });
 
