@@ -24,13 +24,13 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
 		saturation: { type: Number, min: 0, max: 30,  select: false , default: 30 },
 		randomness: { type: Number, min: 0, max: 100, default: 100, select: false }
 
-  }),
+  },{ versionKey: false }),
 
   LiteralSchema = new Schema({
   	text: [ { type: String, default: String } ],
-  	_creator: { type: Number, ref: 'OpForm' }
+  	_creator: { type: String, ref: 'OpForm' }
 
-  }),
+  },{ versionKey: false }),
 
   PersonSchema = new Schema({
   	// to implement

@@ -24,48 +24,42 @@ apiRouter.route('/forms')
 
     var form = new Models.fforms();
     form.opiName = req.body.opiName;
-    literals._creator = form._id;
+    var literals = new Models.literals();
+    var lit = req.body.text.split(',');
+      for (i=0;i< lit.length;i++) {
+        literals.text.push(lit[i]);
+      }
+    form.questions.push(literals);
+    //
+
     form.save(function(err) {
       if (err) {
         if (err.code == 11000)
           return res.json({ success: false, message: 'A form with that name already exists' });
       }
 
-      var literals = new Models.literals();
-      var lit = req.body.text.split(',');
-      
-      for (i=0;i< lit.length;i++) { 
-        literals.text.push(lit[i]);
-      }
-      
-      form.questions.push(literals);
+      literals._creator = form._id;
 
         literals.save(function(err) {
           if (err) {
-            console.log(literals._creator);
+            console.log(literals);
             console.log(form);
-            return res.send(err);
+            return "error saving literals";
           }
-          
         });
       res.json({message: 'Form created!'})
     });
   })
 
   .get(function(req, res) {
-
-    if (req.params.id) {
-
-      Models.fforms.find(function(err, forms) {
-      if (err) res.send(err);
-      res.json(forms)
-      })
-    } else {
-
-      Models.fforms.find()
-      .populate()
-      .exec();
-    }
+    var text = new Models.literals();
+      Models.fforms
+        .find()
+        .populate('questions')
+        .exec(function (err, forms) {
+          if (err) res.send(err);
+          res.json(forms);
+        })
   });
 
 apiRouter.route('/forms/:form_id')
