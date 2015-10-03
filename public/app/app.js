@@ -1,5 +1,5 @@
 // name our angular app
-angular.module('firstApp', [])
+angular.module('FeedApp', [])
 
 .controller('mainController', function() {
 
@@ -10,7 +10,13 @@ angular.module('firstApp', [])
   // this lets them be available to our views
 
   // define a basic variable
-  vm.message = 'Hey there! Come and see how good I look!';
+  vm.message = 'A smooth sea never made a skilled sailor';
+
+  vm.formularios = [
+        { name: 'opi_traspaso_efectivo_tarjeta_push_1', url: 'http://www.bbva.es' },
+        { name: 'opi_seguros_auto_pull_1', url: 'http://www.bbva.es' },
+        { name: 'opi_anticipo_nomina_push_1', url: 'http://www.bbva.es' }
+  ];
 
   // define a list of items
   vm.computers = [
