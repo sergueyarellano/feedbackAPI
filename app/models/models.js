@@ -8,8 +8,8 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
 
 	page: { type: String, required: true, index: { unique: true } },
 	newPage: String,
-	forms: [ { type: Schema.Types.ObjectId, ref: 'OpForm', required: true } ]
-  }),
+	forms: []
+  },{ versionKey: false }),
 
   FormSchema = new Schema({
 
@@ -20,25 +20,15 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
 		urlWidget: { type: String, default: null },
 		starSelected: { type: Number, min: 1, max: 5, default: null },
 
-		questions: [ { type: Schema.Types.ObjectId, ref: 'OpLiteral', select: false } ],
+		questions: [ { type: String, select: false } ],
 		saturation: { type: Number, min: 0, max: 30,  select: false , default: 30 },
 		randomness: { type: Number, min: 0, max: 100, default: 100, select: false }
 
-  },{ versionKey: false }),
+  },{ versionKey: false });
 
-  LiteralSchema = new Schema({
-  	text: [ { type: String, default: String } ],
-  	_creator: { type: String, ref: 'OpForm' }
-
-  },{ versionKey: false }),
-
-  PersonSchema = new Schema({
-  	// to implement
-  });
 
 // http://stackoverflow.com/questions/26861417/set-default-values-to-mongoose-arrays-in-node-js
 module.exports.fforms = mongoose.model('OpForm', FormSchema);
 module.exports.steps = mongoose.model('OpStep', StepSchema);
-module.exports.literals = mongoose.model('OpLiteral', LiteralSchema);
 
 })();

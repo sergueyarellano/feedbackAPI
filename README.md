@@ -13,3 +13,4 @@ npm:
 * npm install -g --save gulp
 * npm install -g --save nodemon
 * npm install --save-dev gulp
+* install livereload extension for chrome

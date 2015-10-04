@@ -1,74 +1,81 @@
-var gulp = require('gulp');
+var gulp            = require('gulp'),
+    less            = require('gulp-less'),
+    server          = require('tiny-lr')(),
+    minifyCSS       = require('gulp-minify-css'),
+    rename          = require('gulp-rename'),
+    concat          = require('gulp-concat'),
+    jshint          = require('gulp-jshint'),
+    jscs            = require('gulp-jscs'),
+    stylish         = require('gulp-jscs-stylish'),
+    uglify          = require('gulp-uglify'),
+    ngAnnotate      = require('gulp-ng-annotate'),
+    nodemon         = require('gulp-nodemon'),
+    notify          = require('gulp-notify'),
+    refresh         = require('gulp-livereload'),
+    wiredep         = require('wiredep').stream,
+    inject          = require('gulp-inject'),
+    angularFilesort = require('gulp-angular-filesort'),
+    lrPort          = 3000;
 
-var less = require('gulp-less');
-var minifyCSS = require('gulp-minify-css');
-var rename = require('gulp-rename');
-var concat = require('gulp-concat');
-
-var jshint  = require('gulp-jshint');
-var jscs = require('gulp-jscs');
-var stylish = require('gulp-jscs-stylish');
-var uglify = require('gulp-uglify');
-var ngAnnotate = require('gulp-ng-annotate');
-var nodemon = require('gulp-nodemon');
-var notify = require('gulp-notify');
-var livereload = require('gulp-livereload');
-var wiredep = require('wiredep').stream;
-var inject = require('gulp-inject');
-var angularFilesort = require('gulp-angular-filesort');
+var paths = {
+  styles: ['public/assets/css/*.less'],
+  scripts: [
+    'server.js',
+    'public/app/*js',
+    'public/app/**/*.js',
+    'app/models/*.js'
+  ],
+  html: [
+    'public/app/views/*.html',
+    'public/app/views/pages/*.html'
+  ],
+  assets: ['public/assets/css'],
+  angular: ['public/app/*.js', 'public/app/**/*.js'],
+  dist: ['public/dist']
+};
 
 gulp.task('css', function() {
-  // Grab the less file, save to main.css
-  return gulp.src('public/assets/css/main.less')
+  return gulp.src(paths.styles)
     .pipe(less())
     .pipe(minifyCSS())
     .pipe(rename({ suffix: '.min'}))
-    .pipe(gulp.dest('public/assets/css'))
-    .pipe(livereload());
+    .pipe(gulp.dest(paths.assets))
+    .pipe(refresh(server));
 });
 
 gulp.task('js', function() {
-  return gulp.src(['server.js', 'public/app/*js', 'public/app/**/*.js', 'app/models/*.js'])
+  return gulp.src(paths.scripts)
     .pipe(jshint())
-    .pipe(jscs())                             // enforce style guide
-    .pipe(stylish.combineWithHintResults())   // combine with jshint results
+    .pipe(jscs())
+    .pipe(stylish.combineWithHintResults())
     .pipe(jshint.reporter('jshint-stylish'))
-    .pipe(livereload());
+    .pipe(refresh(server));
 });
 
 gulp.task('html', function()  {
-  gulp.src('./app/**/*.html')
-    .pipe(livereload());
+  gulp.src(paths.html)
+    .pipe(refresh(server));
 });
 
-// task to lint, minify, and concat frontend angular files
 gulp.task('angular', function() {
-  return gulp.src(['public/app/*.js', 'public/app/**/*.js'])
+  return gulp.src(paths.angular)
     .pipe(jshint())
     .pipe(jshint.reporter('default'))
     .pipe(ngAnnotate())
     .pipe(concat('app.js'))
     .pipe(uglify())
-    .pipe(gulp.dest('public/dist'))
-    .pipe(livereload());
+    .pipe(gulp.dest(paths.dist))
+    .pipe(refresh(server));
 });
 
-//  Busca en  las carpetas  de  estilos y javascript  los archivos
-//  para  inyectarlos en  el  index.html
 gulp.task('inject', function()  {
+  var sources = gulp.src(['public/app/assets/js/*.js','public/app/assets/css/*.css'])
   return  gulp.src('index.html',  {cwd: 'public/app/views'})
-    .pipe(inject(
-        gulp.src(['public/app/assets/js/*.js']).pipe(angularFilesort()),  {
-        read: false,
-        ignorePath: 'public/app/views'
+    .pipe(inject(sources, {
+      read: false,
+      ignorePath: 'public/app/views'
     }))
-    .pipe(inject(
-      gulp.src(['public/app/assets/css/*.css']), {
-        read: false,
-        ignorePath: 'public/app/views'
-      }
-    ))
-    .pipe(gulp.dest('public/app/views'));
+    .pipe(gulp.dest('public/app/views'))
 });
 
 gulp.task('wiredep',  function  ()  {
@@ -80,13 +87,13 @@ gulp.task('wiredep',  function  ()  {
 });
 
 gulp.task('watch', function() {
-  livereload.listen();
+  refresh.listen();
   // watch the less file and run the css task
   gulp.watch('public/assets/css/*.less', ['css', 'inject']);
-  livereload.listen();
+  refresh.listen();
   gulp.watch(['public/app/views/*.html', 'public/app/views/**/*.html'],['html']);
   gulp.watch(['bower.json'],  ['wiredep']);
-  livereload.listen();
+  refresh.listen();
   gulp.watch(['server.js', 'public/app/*.js', 'public/app/**/*.js', 'app/models/*.js'], ['js', 'angular', 'inject']);
 });
 
@@ -101,7 +108,7 @@ gulp.task('nodemon', function () {
     });
 });
 
-https://github.com/JacksonGariety/gulp-nodemon
-
 // Main gulp task
 gulp.task('default', ['nodemon', 'watch', 'inject', 'wiredep']);
+
+// https://gist.github.com/Hendrixer/9939346   gulpfile
