@@ -1,44 +1,64 @@
-// name our angular app
-angular.module('FeedApp', [])
+(function () {
+  'use strict';
 
-.controller('mainController', function() {
+  angular.module('FeedApp', ['ngRoute'])
 
-  // bind this to vm (view-model)
-  var vm = this;
+    .controller('loginController', ['$location', function($location) {
 
-  // define variables and objects on this
-  // this lets them be available to our views
+      // bind this to vm (view-model)
+      var vm = this;
+      
+      vm.doLogin = function() {
+          //$location.path('/home');
+          location.assign('/home');
 
-  // define a basic variable
-  vm.message = 'A smooth sea never made a skilled sailor';
+      };
+      
 
-  vm.formularios = [
-        { name: 'opi_traspaso_efectivo_tarjeta_push_1', url: 'http://www.bbva.es' },
-        { name: 'opi_seguros_auto_pull_1', url: 'http://www.bbva.es' },
-        { name: 'opi_anticipo_nomina_push_1', url: 'http://www.bbva.es' }
-  ];
+    }])
 
-  // define a list of items
-  vm.computers = [
-    { name: 'Macbook Pro', color: 'Silver', nerdness: 7 },
-    { name: 'Yoga 2 Pro', color: 'Gray', nerdness: 6 },
-    { name: 'Chromebook', color: 'Black', nerdness: 5 }
-  ];
+    .controller('ShowFormsController',  function($http) {
+      // bind this to vm (view-model)
+      var vm = this;
+      vm.getFormularios = function ($http) {
+        // body...
+        $http.get('api/form');
+      }
 
-  // information that comes from our form
-  vm.computerData = {};
+      vm.formularios = [
+            { name: 'opi_traspaso_efectivo_tarjeta_push_1', url: 'http://www.bbva.es' },
+            { name: 'opi_seguros_auto_pull_1', url: 'http://www.bbva.es' },
+            { name: 'opi_anticipo_nomina_push_1', url: 'http://www.bbva.es' }
+      ];
 
-  vm.addComputer = function() {
+    })
 
-      // add a computer to the list
-      vm.computers.push({
-          name: vm.computerData.name,
-          color: vm.computerData.color,
-          nerdness: vm.computerData.nerdness
-      });
+    .controller('CreateFormController',  function($http) {
 
-      // after our computer has been added, clear the form
-      vm.computerData = {};
-  };
+      
 
-});
+    })
+    
+    .config(['$routeProvider', '$locationProvider',function($routeProvider, $locationProvider) {
+        $routeProvider
+          .when('/home', {
+            templateUrl: 'app/views/informe.tpl.html'
+          })
+          .when('/createForm', {
+            templateUrl: 'app/views/create.form.tpl.html',
+            controller: 'CreateFormController',
+            controllerAs: 'cfc'
+          })
+          .when('/showForms', {
+            templateUrl: 'app/views/list.forms.tpl.html',
+            controller: 'ShowFormsController',
+            controllerAs: 'sfc'
+          })
+          .otherwise({
+            templateUrl: 'app/views/404.tpl.html'
+          });
+
+          $locationProvider.html5Mode(true);
+    }]);
+
+})();

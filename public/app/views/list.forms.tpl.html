@@ -1,0 +1,23 @@
+<div class="content-wrapper">
+  <section class="content">
+    <div class="row">
+      <div class="col-md-8">
+          <h3>Lista de formularios</h3>        
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Name</th>
+                <th>URL</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="f in sfc.formularios">
+                <td>{{f.name}}</td>
+                <td>{{f.url}}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </section>
+</div> 
