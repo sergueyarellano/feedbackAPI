@@ -1,7 +1,7 @@
 var bodyParser = require('body-parser');
 var Models = require('../models/models');
 var async = require('async');
-
+var path        = require('path');
 module.exports = function(app, express) {
 
 	// get an instance of the express router
@@ -20,30 +20,52 @@ apiRouter.get('/', function(req,res) {
 });
 
 // on routes tha end in /forms
-apiRouter.route('/steps')
+apiRouter.route('/forms')
   .post(function(req, res) {
-    var step = new Models.steps();
+    var fform = new Models.fforms();
 
-    step.page = 'cuentas_transferencias_paso2_destinatario_transferencia';
-    step.newPage = 'cuentas_transferencias_paso2_destinatario_transferencia';
-    step.forms.push({opiName: req.body.opiName});
-
+    fform.opiName = req.body.opiName;
     var text = req.body.text.split(',');
     for (i=0;i< text.length;i++) {
-      step.forms[0].questions.push(text[i]);
+      fform.questions.push(text[i]);
     }
-    step.forms[0].url = "//localhost:3000/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
-    step.forms[0].urlPullButton = "//localhost:3000/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
+    fform.url = "//localhost:3000/api/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
+    fform.urlPullButton = "//localhost:3000/api/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
 
-    step.save(function (err) {
+    fform.save(function (err) {
       if (err) {
         if (err.code == 11000)
-          return res.json({ success: false, message: 'You cannot push a step that already exists' });
+          return res.json({status: 409, success: false, message: 'You cannot push a form with the same name' });
       }
       res.json({message: 'Form created!'})
     });
   })
 
+  .get(function (req, res) {
+    Models.fforms
+      .find(function (err, forms) {
+        if (err) {
+          return res.send(err);
+        }
+        res.json(forms);
+      });
+  });
+
+apiRouter.route('/steps')
+  .post(function(req, res) {
+    var step = new Models.steps();
+
+    step.page = req.body.page;
+    step.newPage = req.body.page;
+
+    step.save(function (err) {
+      if (err) {
+        if (err.code == 11000)
+          return res.json({status: 409, success: false, message: 'You cannot push a step with the same name' });
+      }
+      res.json({message: 'step created!'})
+    });
+  })
   .get(function (req, res) {
     Models.steps
       .find(function (err, steps) {
@@ -52,21 +74,6 @@ apiRouter.route('/steps')
           "responseMsg": "SUCCESS",
           "responseMessage": null
         });
-      });
-  });
-
-apiRouter.route('/steps')
-  .post(function (req, res) {
-    var step = new Models.steps();
-    step.page = req.body.page;
-    step.newPage = step.page;
-  })
-
-  .get(function (req, res) {
-    Models.steps
-      .find(function (err, steps) {
-        if (err) res.send(err);
-        res.json(steps);
       })
   });
 
@@ -84,16 +91,27 @@ apiRouter.route('/steps/:step_id')
     });
   })
 
+  .get(function (req, res) {
+    Models.steps.findOne({opiName: req.param.step_id}, function (err, step) {
+      if (err) {
+        return res.send(err);
+      }
+      res.json(step);
+    });
+  })
+
   .put(function (req, res) {
+
     async.series([
-      function seriesFindStep (nextSeries) {
-        Models.steps.findOne({ page: req.params.step_id })
+      function seriesFindSteps (nextSeries) {
+        Models.steps.find({ page: req.params.step_id })
         .exec(function (err, step) {
           if (err) {
             return res.send(err);
           }
+
           nextSeries(null, step);
-        });
+        })
       },
       function seriesFindForms (nextSeries) {
         Models.fforms.find({ opiName: req.body.opiName })
@@ -101,19 +119,48 @@ apiRouter.route('/steps/:step_id')
           if (err) {
             return res.send(err);
           }
+
           nextSeries(null, forms);
         })
       }
     ],
     function endSeries(err, results) {
-      console.log(results)
+      console.log(results[0][1]);
+     results[0][0].forms.push(results[1][0]);
+
+     results[0][0].save(function(err) {
+      if (err) {
+        return res.send(err);
+      }
+      res.json({message: 'step updated'});
+     });
     }
     );
   });
 
 apiRouter.route('/submits')
   .post(function (req, res) {
+    var submit = new Models.submits();
 
+    submit.opiName = req.body.opiName;
+    submit.answers = req.body.answers;
+    submit.starSelected = req.body.starSelected;
+
+    submit.save(function(err) {
+      if (err) {
+        return res.send(err)
+      }
+      res.json({message: 'Submit OK!'})
+    });
+  })
+  
+  .get(function (req,res) {
+    Models.submits.find(function (err, submits) {
+      if (err) {
+        return res.send(err)
+      }
+      res.json(submits)
+    });
   });
   
 
@@ -147,8 +194,21 @@ apiRouter.route('/forms/:form_id')
         res.json({message: 'Form updated!'});
       });
     });
+  })
+
+  .delete(function(req, res) {
+    Models.fforms.remove({_id: req.params.form_id}, function(err, form) {
+      if (err) {
+        return res.send(err);
+      }
+      res.json({message: 'Successfully deleted!'})
+    });
   });
 
+apiRouter.route('/opi/:opi_name')
+  .get(function (req, res) {
+    res.sendFile(path.join(__dirname + '/login.html'))
+  });
 
 	return apiRouter;
 }

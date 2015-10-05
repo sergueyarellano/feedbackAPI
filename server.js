@@ -16,8 +16,11 @@ var express     = require('express'),
 // - body-parser will let us pull POST content from our HTTP request so that we can do things
 //   like create a user.
 // https://github.com/mongolab/mongodb-driver-examples/blob/master/nodejs/mongooseSimpleExample.js
+
 // Connect to the db
-mongoose.connect(config.database);
+// mongoose.connect(config.database);
+mongoose.connect('mongodb://127.0.0.1:27017/feedbackdb');
+
 
 // APP CONFIGURATION ----------------------
 // use body-parser (middleware) so we can grab information from POST requests.
@@ -29,7 +32,7 @@ app.use(bodyParser.json());
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST');
-  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type, Authorization, accept, x-bbvanet-csrfcookie, x-bbvanet-request, x-bbvanet-requesttimestamp, x-bbvanet-sid');
   next();
 });
 

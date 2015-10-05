@@ -110,7 +110,7 @@ gulp.task('watch', function() {
   gulp.watch(['public/app/views/*.html', 'public/app/views/**/*.html'],['html']);
   gulp.watch(['bower.json'],  ['wiredep']);
   refresh.listen();
-  gulp.watch(['server.js', 'public/app/*.js', 'public/app/**/*.js', 'app/models/*.js'], ['js', 'angular', 'injectangular']);
+  gulp.watch(['server.js', 'public/app/*.js', 'public/app/**/*.js', 'app/models/*.js'], ['js']);
 });
 
 gulp.task('nodemon', function () {
