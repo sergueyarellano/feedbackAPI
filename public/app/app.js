@@ -41,12 +41,16 @@
         // body...
         var data = {};
         data.opiName = vm.fdata.name;
-        data.qtext = vm.fdata.q1 + ',' + vm.fdata.q2;
-        $http.post('api/steps', {params: data});
+        data.text = vm.fdata.q1 + ',' + vm.fdata.q2;
+        return $http.post('api/steps', data)
+          .then(function(data){
+              console.log(data);
+              $('#myModal').modal('show');
+            })
+          .catch(function(data, status) {
+            console.error('API error', response.status, response.data);
+            })
       }
-
-
-
     }])
 
     .config(['$routeProvider', '$locationProvider',function($routeProvider, $locationProvider) {
