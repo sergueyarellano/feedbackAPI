@@ -20,16 +20,15 @@
     .controller('ShowFormsController', ['$http',  function($http) {
       // bind this to vm (view-model)
       var vm = this;
-      vm.getFormularios = function () {
+      vm.getForms = function () {
         // body...
-        $http.get('api/forms');
-      }
+        return $http.get('api/forms')
+          .then(function(response){
+              console.log(response);
+              vm.formularios = response.data;
+            })
 
-      vm.formularios = [
-            { name: 'opi_traspaso_efectivo_tarjeta_push_1', url: 'http://www.bbva.es' },
-            { name: 'opi_seguros_auto_pull_1', url: 'http://www.bbva.es' },
-            { name: 'opi_anticipo_nomina_push_1', url: 'http://www.bbva.es' }
-      ];
+      }
 
     }])
 
@@ -42,10 +41,12 @@
         var data = {};
         data.opiName = vm.fdata.name;
         data.text = vm.fdata.q1 + ',' + vm.fdata.q2;
-        return $http.post('api/steps', data)
-          .then(function(data){
-              console.log(data);
+        return $http.post('api/forms', data)
+          .then(function(response){
+              console.log(response);
+              $('.modal-text').text = response.data.message;
               $('#myModal').modal('show');
+              $('#form1').get(0).reset();
             })
           .catch(function(data, status) {
             console.error('API error', response.status, response.data);
