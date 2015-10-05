@@ -105,12 +105,12 @@ gulp.task('wiredep',  function  ()  {
 gulp.task('watch', function() {
   refresh.listen();
   // watch the less file and run the css task
-  gulp.watch('public/assets/css/*.less', ['css', 'inject']);
+  gulp.watch('public/assets/css/*.less', ['css']);
   refresh.listen();
   gulp.watch(['public/app/views/*.html', 'public/app/views/**/*.html'],['html']);
   gulp.watch(['bower.json'],  ['wiredep']);
   refresh.listen();
-  gulp.watch(['server.js', 'public/app/*.js', 'public/app/**/*.js', 'app/models/*.js'], ['js', 'angular', 'inject']);
+  gulp.watch(['server.js', 'public/app/*.js', 'public/app/**/*.js', 'app/models/*.js'], ['js', 'angular', 'injectangular']);
 });
 
 gulp.task('nodemon', function () {

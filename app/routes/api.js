@@ -32,8 +32,8 @@ apiRouter.route('/steps')
     for (i=0;i< text.length;i++) {
       step.forms[0].questions.push(text[i]);
     }
-    step.forms[0].url = "//localhost:3000/opi/" + req.body.opiName + "?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
-    step.forms[0].urlPullButton = "//localhost:3000/opi/" + req.body.opiName + + "?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
+    step.forms[0].url = "//localhost:3000/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
+    step.forms[0].urlPullButton = "//localhost:3000/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
 
     step.save(function (err) {
       if (err) {
