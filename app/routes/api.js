@@ -207,7 +207,7 @@ apiRouter.route('/forms/:form_id')
 
 apiRouter.route('/opi/:opi_name')
   .get(function (req, res) {
-    res.sendFile(path.join(__dirname + '/login.html'))
+    res.sendFile(path.join(__dirname + '/opi.html'))
   });
 
 	return apiRouter;

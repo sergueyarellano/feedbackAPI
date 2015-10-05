@@ -1,0 +1,27 @@
+<div class="content-wrapper">
+  <section class="content">
+    <div class="row">
+      <div class="col-md-8">
+          <h3>Todas las opiniones</h3>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Nombre</th>
+                <th>URL</th>
+                <th>Activo</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="f in sfc.formularios">
+                <td>{{f.opiName}}</td>
+                <td>{{f.url}}</td>
+                <td>{{f.mustShowOpi}}</td>
+                <td><i class="fa fa-eye"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </section>
+</div>

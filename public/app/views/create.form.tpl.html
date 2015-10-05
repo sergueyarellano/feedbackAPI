@@ -16,8 +16,15 @@
                 <input type="text" class="form-control" id="opiName" ng-model="cfc.fdata.name">
               </div>
               <div class="form-group">
-                <label for="labelq1">Pregunta 1</label>
+                <label for="labelq1"></label>
                 <input type="text" class="form-control" id="textq1" ng-model="cfc.fdata.q1">
+                <div class="stars-sim5">
+                  <i class="star fa-star" style="width: 30px;height: 40px;color: #FFB800;"></i>
+                  <i class="star fa-star" style="width: 30px;height: 40px;color: #FFB800;"></i>
+                  <i class="star fa-star" style="width: 30px;height: 40px;color: #FFB800;"></i>
+                  <i class="star fa-star-o" style="width: 30px;height: 40px;color: #FFB800;"></i>
+                  <i class="star fa-star-o" style="width: 30px;height: 40px;color: #FFB800;"></i>
+                </div>
               </div>
               <div class="form-group">
                 <label for="labelq2">Pregunta 2</label>
@@ -25,7 +32,7 @@
               </div>
               <div class="form-group">
                 <div class="checkbox">
-                  <label><input type="checkbox" value="true">Activo</label>
+                  <label><input type="checkbox" checked>Activo</label>
                 </div>
               </div>
               <!-- select -->
@@ -39,7 +46,7 @@
             </div><!-- /.box-body -->
 
             <div class="box-footer">
-              <button type="submit" class="btn btn-primary">Enviar</button>
+              <button type="submit" class="btn btn-primary"><i class="fa fa-check"></i>Guardar</button>
             </div>
           </form>
 
