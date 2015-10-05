@@ -2,6 +2,7 @@ var bodyParser = require('body-parser');
 var Models = require('../models/models');
 var async = require('async');
 var path        = require('path');
+var fs = require('fs');
 module.exports = function(app, express) {
 
 	// get an instance of the express router
@@ -23,7 +24,6 @@ apiRouter.get('/', function(req,res) {
 apiRouter.route('/forms')
   .post(function(req, res) {
     var fform = new Models.fforms();
-
     fform.opiName = req.body.opiName;
     var text = req.body.text.split(',');
     for (i=0;i< text.length;i++) {
@@ -32,13 +32,33 @@ apiRouter.route('/forms')
     fform.url = "//localhost:3000/api/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
     fform.urlPullButton = "//localhost:3000/api/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
 
-    fform.save(function (err) {
-      if (err) {
-        if (err.code == 11000)
-          return res.json({status: 409, success: false, message: 'You cannot push a form with the same name' });
-      }
-      res.json({message: 'Form created!'})
-    });
+    async.series([
+      function seriesSaveForm(nextSeries) {
+        fform.save(function (err) {
+          if (err) {
+            if (err.code == 11000)
+              return res.json({status: 409, success: false, message: 'You cannot push a form with the same name' });
+          }
+          res.json({message: 'Form created!'});
+          nextSeries(null);
+        });
+    }],
+      function endSeriesGenerateHTML (err, results) {
+
+        var pathToTmpl = path.join(__dirname + '/../../public/app/views/formstmpl/'+ fform.opiName + '.html');
+        fs.createReadStream(path.join(__dirname +'/tmplform.html')).pipe(fs.createWriteStream(pathToTmpl));
+        fs.readFile(pathToTmpl, 'utf8', function (err,data) {
+          if (err) {
+            return console.log(err);
+          }
+          var result = data.replace(/regExpQ1/g, fform.questions[0]);
+
+          fs.writeFile(pathToTmpl, result, 'utf8', function (err) {
+             if (err) return res.send(err);
+          });
+        });
+
+      });
   })
 
   .get(function (req, res) {
@@ -70,7 +90,7 @@ apiRouter.route('/steps')
     Models.steps
       .find(function (err, steps) {
         res.json({
-          "responseObject": steps, 
+          "responseObject": steps,
           "responseMsg": "SUCCESS",
           "responseMessage": null
         });
@@ -82,8 +102,8 @@ apiRouter.route('/steps/:step_id')
     Models.steps
       .remove({
       _id: req.params.step_id
-      }, 
-      function(err, form) {
+      },
+      function(err, step) {
         if (err) {
           res.send(err)
         }
@@ -109,7 +129,6 @@ apiRouter.route('/steps/:step_id')
           if (err) {
             return res.send(err);
           }
-
           nextSeries(null, step);
         })
       },
@@ -119,7 +138,6 @@ apiRouter.route('/steps/:step_id')
           if (err) {
             return res.send(err);
           }
-
           nextSeries(null, forms);
         })
       }
@@ -134,8 +152,7 @@ apiRouter.route('/steps/:step_id')
       }
       res.json({message: 'step updated'});
      });
-    }
-    );
+    });
   });
 
 apiRouter.route('/submits')
@@ -153,7 +170,7 @@ apiRouter.route('/submits')
       res.json({message: 'Submit OK!'})
     });
   })
-  
+
   .get(function (req,res) {
     Models.submits.find(function (err, submits) {
       if (err) {
@@ -162,7 +179,6 @@ apiRouter.route('/submits')
       res.json(submits)
     });
   });
-  
 
 apiRouter.route('/forms/:form_id')
   .get(function (req, res) {
@@ -197,17 +213,34 @@ apiRouter.route('/forms/:form_id')
   })
 
   .delete(function(req, res) {
-    Models.fforms.remove({_id: req.params.form_id}, function(err, form) {
-      if (err) {
-        return res.send(err);
-      }
-      res.json({message: 'Successfully deleted!'})
+    formOpiName = [];
+    async.series([
+      function seriesRemoveTmpl (nextSeries) {
+        Models.fforms.find({ _id: req.params.form_id}, function (err, form) {
+          var pathToTmpl = path.join(__dirname + '/../../public/app/views/formstmpl/'+ form[0].opiName + '.html');
+          fs.unlink(pathToTmpl);
+          console.log(pathToTmpl);
+          nextSeries(null);
+        });
+    }],
+    function seriesRemoveForms (err, results) {
+      Models.fforms
+        .remove({
+        _id: req.params.form_id
+        },
+        function(err, step) {
+          if (err) {
+            res.send(err)
+          }
+        res.json({message: 'Successfully deleted'});
+      });
     });
   });
 
 apiRouter.route('/opi/:opi_name')
   .get(function (req, res) {
-    res.sendFile(path.join(__dirname + '/opi.html'))
+    var pathToTmpl = path.join(__dirname + '/../../public/app/views/formstmpl/'+ req.params.opi_name + '.html');
+    res.sendFile(pathToTmpl);
   });
 
 	return apiRouter;

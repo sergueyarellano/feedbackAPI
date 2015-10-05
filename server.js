@@ -18,8 +18,8 @@ var express     = require('express'),
 // https://github.com/mongolab/mongodb-driver-examples/blob/master/nodejs/mongooseSimpleExample.js
 
 // Connect to the db
-// mongoose.connect(config.database);
-mongoose.connect('mongodb://127.0.0.1:27017/feedbackdb');
+mongoose.connect(config.database);
+// mongoose.connect('mongodb://127.0.0.1:27017/feedbackdb');
 
 
 // APP CONFIGURATION ----------------------
