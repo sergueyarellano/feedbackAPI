@@ -20,7 +20,7 @@ apiRouter.get('/', function(req,res) {
 });
 
 // on routes tha end in /forms
-apiRouter.route('/forms')
+apiRouter.route('/steps')
   .post(function(req, res) {
     var step = new Models.steps();
 
@@ -32,12 +32,13 @@ apiRouter.route('/forms')
     for (i=0;i< text.length;i++) {
       step.forms[0].questions.push(text[i]);
     }
+    step.forms[0].url = "//localhost:3000/opi/" + req.body.opiName + "?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
+    step.forms[0].urlPullButton = "//localhost:3000/opi/" + req.body.opiName + + "?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
 
-    console.log(step);
     step.save(function (err) {
       if (err) {
         if (err.code == 11000)
-          return res.json({ success: false, message: 'A form with that name already exists' });
+          return res.json({ success: false, message: 'You cannot push a step that already exists' });
       }
       res.json({message: 'Form created!'})
     });
@@ -46,17 +47,14 @@ apiRouter.route('/forms')
   .get(function (req, res) {
     Models.steps
       .find(function (err, steps) {
-        res.json({"responseObject": [steps]});
-      })
-
-    // Models.fforms
-    //   .find()
-    //   .populate('questions')
-    //   .exec(function (err, forms) {
-    //     if (err) res.send(err);
-    //     res.json(forms);
-    //   })
+        res.json({
+          "responseObject": steps, 
+          "responseMsg": "SUCCESS",
+          "responseMessage": null
+        });
+      });
   });
+
 apiRouter.route('/steps')
   .post(function (req, res) {
     var step = new Models.steps();
@@ -73,8 +71,20 @@ apiRouter.route('/steps')
   });
 
 apiRouter.route('/steps/:step_id')
+  .delete(function(req, res) {
+    Models.steps
+      .remove({
+      _id: req.params.step_id
+      }, 
+      function(err, form) {
+        if (err) {
+          res.send(err)
+        }
+      res.json({message: 'Successfully deleted'});
+    });
+  })
+
   .put(function (req, res) {
-    // var arrayForms = req.body.forms.split(',');
     async.series([
       function seriesFindStep (nextSeries) {
         Models.steps.findOne({ page: req.params.step_id })
@@ -99,9 +109,13 @@ apiRouter.route('/steps/:step_id')
       console.log(results)
     }
     );
+  });
 
+apiRouter.route('/submits')
+  .post(function (req, res) {
 
   });
+  
 
 apiRouter.route('/forms/:form_id')
   .get(function (req, res) {
@@ -133,17 +147,9 @@ apiRouter.route('/forms/:form_id')
         res.json({message: 'Form updated!'});
       });
     });
-  })
-
-  .delete(function(req, res) {
-    Models.fforms.remove({
-      _id: req.params.form_id
-
-    }, function(err, form) {
-      if (err) res.send(err);
-
-      res.json({message: 'Successfully deleted'});
-    });
   });
+
+
 	return apiRouter;
 }
+

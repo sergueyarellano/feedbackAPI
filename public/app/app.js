@@ -22,7 +22,7 @@
       var vm = this;
       vm.getFormularios = function ($http) {
         // body...
-        $http.get('api/form');
+        $http.get('api/forms');
       }
 
       vm.formularios = [
