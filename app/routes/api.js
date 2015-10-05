@@ -24,14 +24,16 @@ apiRouter.route('/forms')
   .post(function(req, res) {
 
     var step = new Models.steps();
-    steps.forms.opiName = req.body.opiName;
-    var lit = req.body.text.split(',');
+    step.page = 'cuentas_transferencias_paso2_destinatario_transferencia';
+    step.newPage = 'cuentas_transferencias_paso2_destinatario_transferencia';
+    step.forms.opiName = req.body.opiName;
+    var text = req.body.text.split(',');
 
-    for (i=0;i< lit.length;i++) {
-      steps.questions.push(lit[i]);
+    for (i=0;i< text.length;i++) {
+      step.forms.questions.push(text[i]);
     }
 
-    form.save(function (err) {
+    step.save(function (err) {
       if (err) {
         if (err.code == 11000)
           return res.json({ success: false, message: 'A form with that name already exists' });

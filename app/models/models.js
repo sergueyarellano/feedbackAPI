@@ -4,13 +4,6 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
     Schema    = mongoose.Schema,
 // reference http://mongoosejs.com/docs/schematypes.html
 // form Schema
-  StepSchema = new Schema({
-
-	page: { type: String, required: true, index: { unique: true } },
-	newPage: String,
-	forms: [FormSchema]
-  }),
-
   FormSchema = new Schema({
 
 		opiName: { type: String, required: true, lowercase: true, index: { unique: true } },
@@ -24,7 +17,15 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
 		saturation: { type: Number, min: 0, max: 30,  select: false , default: 30 },
 		randomness: { type: Number, min: 0, max: 100, default: 100, select: false }
 
+  }),
+
+  StepSchema = new Schema({
+		page: { type: String, required: true, index: { unique: true } },
+		newPage: String,
+		forms: [FormSchema]
   });
+
+
 
 // http://stackoverflow.com/questions/26861417/set-default-values-to-mongoose-arrays-in-node-js
 // module.exports.fforms = mongoose.model('OpForm', FormSchema);
