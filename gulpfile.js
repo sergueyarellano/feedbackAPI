@@ -69,8 +69,8 @@ gulp.task('angular', function() {
 });
 
 gulp.task('inject', function()  {
-  var sources = gulp.src(['public/app/assets/js/*.js','public/app/assets/css/*.css'])
-  return  gulp.src('index.html',  {cwd: 'public/app/views'})
+  var sources = gulp.src(['./public/assets/script/*.js','./public/assets/css/*.css']);
+  return  gulp.src('index.html',  {cwd: './public/app/views'})
     .pipe(inject(sources, {
       read: false,
       ignorePath: 'public/app/views'
@@ -79,11 +79,11 @@ gulp.task('inject', function()  {
 });
 
 gulp.task('wiredep',  function  ()  {
-  gulp.src('public/app/views/index.html')
+  gulp.src('./public/app/views/index.html')
     .pipe(wiredep({
-      directory:  'public/assets/libs'
+      directory:  './public/assets/libs'
     }))
-    .pipe(gulp.dest('public/app/views'));
+    .pipe(gulp.dest('./public/app/views'));
 });
 
 gulp.task('watch', function() {

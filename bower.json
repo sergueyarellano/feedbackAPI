@@ -3,10 +3,28 @@
   "version": "0.0.1",
   "description": "API feedback enablement and CMS",
   "dependencies": {
-    "font-awesome": "~4.4.0",
-    "bootstrap": "~3.3.5",
+    "Chart.js": "chartjs#~1.0.2",
     "angular": "~1.4.7",
+    "angular-animate": "~1.4.7",
     "angular-route": "~1.4.7",
-    "angular-animate": "~1.4.7"
+    "bootstrap": "~3.3.5",
+    "flot.tooltip": "~0.8.5",
+    "font-awesome": "~4.4.0",
+    "jquery": "~2.1.4",
+    "jquery-backstretch": "~2.0.4"
+  },
+  "overrides": {
+    "bootstrap": {
+      "main": [
+        "dist/js/bootstrap.js",
+        "dist/css/bootstrap.css",
+        "less/bootstrap.less"
+      ]
+    },
+    "font-awesome": {
+      "main": [
+        "css/font-awesome.css"
+      ]
+    }
   }
 }
