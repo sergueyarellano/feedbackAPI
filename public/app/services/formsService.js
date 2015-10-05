@@ -1,6 +1,6 @@
 (function () {
   'use strict';
-  angular.module('formService', [])
+  angular.module('FeedApp', [])
 
     .factory('Formulario', function($http) {
 

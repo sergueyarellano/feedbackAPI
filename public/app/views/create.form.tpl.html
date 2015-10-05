@@ -9,25 +9,22 @@
             <h3 class="box-title">Nuevo formulario</h3>
           </div><!-- /.box-header -->
           <!-- form start -->
-          <form role="form" data-ng-click="createFormulario()">
+          <form role="form" method="post" data-ng-click="h.createFormulario()">
             <div class="box-body">
               <div class="form-group">
                 <label for="labelq1">Pregunta1</label>
                 <input type="text" class="form-control" id="textq1">
               </div>
               <div class="form-group">
-                <label for="labelq2">Pregunta1</label>
+                <label for="labelq2">Pregunta2</label>
                 <input type="text" class="form-control" id="textq2">
               </div>
               <!-- select -->
               <div class="form-group">
-                <label>Select</label>
+                <label>Estilo</label>
                 <select class="form-control">
-                  <option>option 1</option>
-                  <option>option 2</option>
-                  <option>option 3</option>
-                  <option>option 4</option>
-                  <option>option 5</option>
+                  <option>Web</option>
+                  <option>Movil</option>
                 </select>
               </div>
             </div><!-- /.box-body -->

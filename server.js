@@ -43,7 +43,11 @@ var ser = 1;
 // ========================================
 // basic route for the home page
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/app/views/index.html'))
+  res.sendFile(path.join(__dirname + '/public/app/login.html'))
+});
+
+app.get('/home', function(req, res) {
+  res.sendFile(path.join(__dirname + '/public/app/home.html'))
 });
 
 var apiRoutes = require('./app/routes/api')(app, express);

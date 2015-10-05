@@ -1,15 +1,17 @@
 (function () {
   'use strict';
-  angular.module('app.routes', ['ngRoute'])
-    .config(function($routeProvider, $locationProvider) {
+
+  angular.module('FeedApp', ['ngRoute'])
+
+    .config(['$routeProvider', '$locationProvider',function($routeProvider, $locationProvider) {
         $routeProvider
           .when('/', {
-            templateUrl: 'app/views/pages/login.tpl.html',
+            templateUrl: 'views/pages/login.tpl.html',
             controller: 'mainController',
             controllerAs: 'main'
           })
           .when('/home', {
-            templateUrl: 'app/views/pages/home.tpl.html'
+            templateUrl: 'views/pages/home.tpl.html'
           })
           .when('/createForm', {
             templateUrl: 'app/views/pages/create.form.tpl.html',
@@ -26,5 +28,5 @@
           });
 
           $locationProvider.html5Mode(true);
-    });
+    }]);
 })();
