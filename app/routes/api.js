@@ -22,17 +22,18 @@ apiRouter.get('/', function(req,res) {
 // on routes tha end in /forms
 apiRouter.route('/forms')
   .post(function(req, res) {
-
     var step = new Models.steps();
+
     step.page = 'cuentas_transferencias_paso2_destinatario_transferencia';
     step.newPage = 'cuentas_transferencias_paso2_destinatario_transferencia';
-    step.forms.opiName = req.body.opiName;
-    var text = req.body.text.split(',');
+    step.forms.push({opiName: req.body.opiName});
 
+    var text = req.body.text.split(',');
     for (i=0;i< text.length;i++) {
-      step.forms.questions.push(text[i]);
+      step.forms[0].questions.push(text[i]);
     }
 
+    console.log(step);
     step.save(function (err) {
       if (err) {
         if (err.code == 11000)
@@ -43,9 +44,9 @@ apiRouter.route('/forms')
   })
 
   .get(function (req, res) {
-    Models.fforms
-      .find(function (err, forms) {
-        res.json(forms);
+    Models.steps
+      .find(function (err, steps) {
+        res.json({"responseObject": [steps]});
       })
 
     // Models.fforms
