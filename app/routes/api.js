@@ -23,12 +23,12 @@ apiRouter.get('/', function(req,res) {
 apiRouter.route('/forms')
   .post(function(req, res) {
 
-    var form = new Models.fforms();
-    form.opiName = req.body.opiName;
+    var step = new Models.steps();
+    steps.forms.opiName = req.body.opiName;
     var lit = req.body.text.split(',');
 
     for (i=0;i< lit.length;i++) {
-      form.questions.push(lit[i]);
+      steps.questions.push(lit[i]);
     }
 
     form.save(function (err) {

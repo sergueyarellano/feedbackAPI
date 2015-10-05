@@ -21,17 +21,28 @@ var paths = {
   styles: ['public/assets/css/*.less'],
   scripts: [
     'server.js',
-    'public/app/*js',
+    'public/app/*.js',
     'public/app/**/*.js',
     'app/models/*.js'
   ],
   html: [
     'public/app/views/*.html',
-    'public/app/views/pages/*.html'
+    'public/app/*.html'
   ],
   assets: ['public/assets/css'],
   angular: ['public/app/*.js', 'public/app/**/*.js'],
-  dist: ['public/dist']
+  dist: ['public/dist'],
+  assetslogin: [
+  'public/assets/js/placeholder.js',
+  'public/assets/js/login.js',
+  'public/assets/css/login.css',
+  'public/assets/css/form-elements.css'
+  ],
+  assetshome: [
+  'public/assets/js/placeholder.js',
+  'public/assets/js/core.js',
+  'public/assets/css/core.css'
+  ]
 };
 
 gulp.task('css', function() {
@@ -68,22 +79,27 @@ gulp.task('angular', function() {
     .pipe(refresh(server));
 });
 
-gulp.task('inject', function()  {
-  var sources = gulp.src(['./public/assets/script/*.js','./public/assets/css/*.css']);
-  return  gulp.src('index.html',  {cwd: './public/app/views'})
-    .pipe(inject(sources, {
-      read: false,
-      ignorePath: 'public/app/views'
-    }))
-    .pipe(gulp.dest('public/app/views'))
+gulp.task('injectlogin', function()  {
+  var sources = gulp.src(paths.assetslogin, {read: false});
+  return  gulp.src(['login.html'],  {cwd: './public/app'})
+    .pipe(inject(sources,{relative: true}))
+    .pipe(gulp.dest('public/app'));
 });
 
+gulp.task('injecthome', function()  {
+  var sources = gulp.src(paths.assetshome, {read: false});
+  return  gulp.src(['home.html'],  {cwd: './public/app'})
+    .pipe(inject(sources,{relative: true}))
+    .pipe(gulp.dest('public/app'));
+});
+
+
 gulp.task('wiredep',  function  ()  {
-  gulp.src('./public/app/views/index.html')
+  gulp.src(['./public/app/home.html', './public/app/login.html'])
     .pipe(wiredep({
       directory:  './public/assets/libs'
     }))
-    .pipe(gulp.dest('./public/app/views'));
+    .pipe(gulp.dest('./public/app'));
 });
 
 gulp.task('watch', function() {
@@ -109,6 +125,6 @@ gulp.task('nodemon', function () {
 });
 
 // Main gulp task
-gulp.task('default', ['nodemon', 'watch', 'inject', 'wiredep']);
+gulp.task('default', ['nodemon', 'watch', 'injectlogin', 'injecthome', 'wiredep']);
 
 // https://gist.github.com/Hendrixer/9939346   gulpfile
