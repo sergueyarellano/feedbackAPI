@@ -125,6 +125,6 @@ gulp.task('nodemon', function () {
 });
 
 // Main gulp task
-gulp.task('default', ['nodemon', 'watch', 'injectlogin', 'injecthome', 'wiredep']);
+gulp.task('default', ['nodemon', 'watch', 'injectlogin', 'injecthome']);
 
 // https://gist.github.com/Hendrixer/9939346   gulpfile

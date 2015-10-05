@@ -1,8 +1,3 @@
-  /* ChartJS
-   * -------
-   * Here we will create a few charts using ChartJS
-   */
-
   //-----------------------
   //- MONTHLY SALES CHART -
   //-----------------------
@@ -82,4 +77,4 @@ $(function () {
   };
    //Create the line chart
   salesChart.Line(salesChartData, salesChartOptions);
-}(jQuery));
+}());
