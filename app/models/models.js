@@ -19,23 +19,20 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
 
   }),
 
-  SubmitSchema = new Schema({
+  RecordSchema = new Schema({
   	opiName: { type: String, required: true, lowercase: true, index: { unique: true } },
 		answers: [{ type: String, required: true, lowercase: true }],
-		starSelected: { type: Number, min: 1, max: 5, default: null }
+		starSelected: { type: Number, min: 1, max: 5, default: null },
+		freeText: { type: String, lowercase: true }
   }),
 
   PasoSchema = new Schema({
-		page: { type: String, index: { unique: true }},
+		page: { type: String, required: true, lowercase: true, index: { unique: true }},
 		newPage: String,
 		forms: []
   });
 
-
-
-// http://stackoverflow.com/questions/26861417/set-default-values-to-mongoose-arrays-in-node-js
-
 module.exports.steps = mongoose.model('OpPaso', PasoSchema);
-module.exports.submits = mongoose.model('OpSubmit', SubmitSchema);
+module.exports.records = mongoose.model('OpRecord', RecordSchema);
 module.exports.fforms = mongoose.model('OpForm', FormSchema);
 })();

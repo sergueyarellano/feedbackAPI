@@ -1,37 +1,38 @@
-var bodyParser = require('body-parser');
-var Models = require('../models/models');
-var async = require('async');
-var path        = require('path');
-var fs = require('fs');
+'use strict';
+(function(){
+var bodyParser  = require('body-parser'),
+    Models      = require('../models/models'),
+    async       = require('async'),
+    path        = require('path'),
+    fs          = require('fs');
+
 module.exports = function(app, express) {
 
-	// get an instance of the express router
 var apiRouter = express.Router();
-var i = 1;
-var date = new Date();
-apiRouter.use(function(req, res, next) {
-  console.log('» ' + i + ' connections to endpoint /api/* » ' + date)
-  i++;
-  next();
-});
-// test route to make sure everything is working
-// accessed at get GET http://localhost:3000/api
+
+/* Accessed at get GET http://localhost:3000/api */
 apiRouter.get('/', function(req,res) {
   res.json({ message: 'welcome to our API!'});
 });
 
-// on routes tha end in /forms
 apiRouter.route('/forms')
   .post(function(req, res) {
+
+    // Instantiate Form model,
+    // grab values from body request
     var fform = new Models.fforms();
     fform.opiName = req.body.opiName;
-    var text = req.body.text.split(',');
-    for (i=0;i< text.length;i++) {
-      fform.questions.push(text[i]);
-    }
     fform.url = "//localhost:3000/api/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
     fform.urlPullButton = "//localhost:3000/api/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
 
+    var text = req.body.text.split(',');
+    for (var i = 0;i< text.length;i++) {
+      fform.questions.push(text[i]);
+    }
+
+    // Prepare asynchronous callbacks,
+    // First series: save the form.
+    // End series: copy the template file form and write in new data.
     async.series([
       function seriesSaveForm(nextSeries) {
         fform.save(function (err) {
@@ -42,26 +43,40 @@ apiRouter.route('/forms')
           res.json({message: 'Form created!'});
           nextSeries(null);
         });
-    }],
+      }
+    ],
       function endSeriesGenerateHTML (err, results) {
-
         var pathToTmpl = path.join(__dirname + '/../../public/app/views/formstmpl/'+ fform.opiName + '.html');
-        fs.createReadStream(path.join(__dirname +'/tmplform.html')).pipe(fs.createWriteStream(pathToTmpl));
-        fs.readFile(pathToTmpl, 'utf8', function (err,data) {
-          if (err) {
-            return console.log(err);
-          }
-          var result = data.replace(/regExpQ1/g, fform.questions[0]);
-
-          fs.writeFile(pathToTmpl, result, 'utf8', function (err) {
-             if (err) return res.send(err);
+        fs.createReadStream(path.join(__dirname +'/../../public/app/views/formstmpl/form.tpl.html')).pipe(fs.createWriteStream(pathToTmpl));
+        var i = 0;
+          fs.readFile(pathToTmpl, 'utf8', function (err,data) {
+            
+            if (err) {
+              return console.log(err);
+            }
+          
+            for (i = 0; i < fform.questions.length; i++) {
+              console.log(i);
+              var pattern = new RegExp("regExpQ" + i);
+              var result = data.replace(pattern, fform.questions[i]);
+              console.log(result);
+              
+              fs.writeFileSync(pathToTmpl, result, 'utf8', function (err) {
+                if (err) {
+                  return res.send(err);
+                }
+              });    
+              // update the data for the next iteration
+              var data = result;
+            }
           });
-        });
-
-      });
+        }
+      );
   })
 
   .get(function (req, res) {
+
+    // Return all the forms
     Models.fforms
       .find(function (err, forms) {
         if (err) {
@@ -71,22 +86,74 @@ apiRouter.route('/forms')
       });
   });
 
+apiRouter.route('/forms/:form_name')
+  .get(function (req, res) {
+
+    // Return one form
+    Models.fforms
+      .findOne({ opiName: req.params.form_name}, function (err, form) {
+        if (err) {
+          res.send(err);
+        }
+        res.json(form);
+      });
+  })
+
+  .delete(function(req, res) {
+
+    // Prepare asynchronous callbacks,
+    // First series: Remove the html template for a specific form.
+    // End series: Remove the form from the DB.
+    async.series([
+      function seriesRemoveTmpl (nextSeries) {
+        Models.fforms
+          .findOne({ opiName: req.params.form_name}, function (err, form) {
+            var pathToTmpl = path.join(__dirname + '/../../public/app/views/formstmpl/'+ form.opiName + '.html');
+            fs.unlink(pathToTmpl);
+
+            nextSeries(null);
+          });
+      }
+    ],
+      function endSeriesRemoveForms (err, results) {
+        Models.fforms
+          .remove({
+            opiName: req.params.form_name
+          },
+            function(err, step) {
+              if (err) {
+                res.send(err)
+              }
+              res.json({message: 'Successfully deleted'});
+            }
+          );
+      }
+    );
+  });
+
 apiRouter.route('/steps')
   .post(function(req, res) {
-    var step = new Models.steps();
 
+    // Instantiate Step model,
+    // grab values from the request
+    var step = new Models.steps();
     step.page = req.body.page;
     step.newPage = req.body.page;
 
+    // save the step to the db
     step.save(function (err) {
       if (err) {
         if (err.code == 11000)
-          return res.json({status: 409, success: false, message: 'You cannot push a step with the same name' });
+          res.statusCode = 404;
+          return res.json({status: 404, success: false, message: 'You cannot push a step with the same name' });
       }
       res.json({message: 'step created!'})
     });
   })
+
   .get(function (req, res) {
+
+    // Return all the steps wrapped in opinator form
     Models.steps
       .find(function (err, steps) {
         res.json({
@@ -94,37 +161,36 @@ apiRouter.route('/steps')
           "responseMsg": "SUCCESS",
           "responseMessage": null
         });
-      })
+      });
   });
 
-apiRouter.route('/steps/:step_id')
-  .delete(function(req, res) {
-    Models.steps
-      .remove({
-      _id: req.params.step_id
-      },
-      function(err, step) {
-        if (err) {
-          res.send(err)
-        }
-      res.json({message: 'Successfully deleted'});
-    });
-  })
-
+apiRouter.route('/steps/:step_name')
+  
   .get(function (req, res) {
-    Models.steps.findOne({opiName: req.param.step_id}, function (err, step) {
-      if (err) {
-        return res.send(err);
-      }
-      res.json(step);
-    });
+
+    // Return a single step with the name as a param
+    Models.steps
+      .findOne({
+        page: req.params.step_name
+      }, 
+        function (err, step) {
+          if (err) {
+            return res.send(err);
+          } 
+          res.json(step);
+        }
+      );
   })
 
   .put(function (req, res) {
 
+    // Prepare asynchronous callbacks,
+    // First series: Finds a step and pass it
+    // Second series: find the form and pass it
+    // End series: Push the form to the step and save step
     async.series([
       function seriesFindSteps (nextSeries) {
-        Models.steps.find({ page: req.params.step_id })
+        Models.steps.find({ page: req.params.step_name })
         .exec(function (err, step) {
           if (err) {
             return res.send(err);
@@ -138,103 +204,81 @@ apiRouter.route('/steps/:step_id')
           if (err) {
             return res.send(err);
           }
+          if (!forms.length) {
+            res.statusCode = 404;
+            return res.json({message: 'There is no form with that name'});
+          }
           nextSeries(null, forms);
         })
       }
     ],
-    function endSeries(err, results) {
-      console.log(results[0][1]);
-     results[0][0].forms.push(results[1][0]);
+      function endSeries(err, results) {
+        console.log(results[0][1]);
+       results[0][0].forms.push(results[1][0]);
 
-     results[0][0].save(function(err) {
-      if (err) {
-        return res.send(err);
+       results[0][0].save(function(err) {
+        if (err) {
+          return res.send(err);
+        }
+        res.json({message: 'step updated'});
+       });
       }
-      res.json({message: 'step updated'});
-     });
-    });
-  });
-
-apiRouter.route('/submits')
-  .post(function (req, res) {
-    var submit = new Models.submits();
-
-    submit.opiName = req.body.opiName;
-    submit.answers = req.body.answers;
-    submit.starSelected = req.body.starSelected;
-
-    submit.save(function(err) {
-      if (err) {
-        return res.send(err)
-      }
-      res.json({message: 'Submit OK!'})
-    });
-  })
-
-  .get(function (req,res) {
-    Models.submits.find(function (err, submits) {
-      if (err) {
-        return res.send(err)
-      }
-      res.json(submits)
-    });
-  });
-
-apiRouter.route('/forms/:form_id')
-  .get(function (req, res) {
-    Models.fforms.findById(req.params.form_id, function (err, form) {
-      if (err) res.send(err);
-
-      // return that form
-      res.json(form);
-    });
-  })
-
-  .put(function(req, res) {
-    Models.fforms.findById(req.params.form_id, function (err, form) {
-      if (err) res.send(err);
-// MUST REMAKE THE REQUESTS HERE AS I DID ON POST METHOD
-      // update the form only if it's new
-      if(req.body.name) form.name = req.body.name;
-      if(req.body.type) form.type = req.body.type;
-      if(req.body.updated) form.updated = req.body.updated;
-      if(req.body.templatesURL) form.templatesURL = req.body.templatesURL;
-      if(req.body.stars) form.stars = req.body.stars;
-      if(req.body.carrys) form.carrys = req.body.carrys;
-      if(req.body.imgs) form.imgs = req.body.imgs;
-
-      // save the form
-      form.save(function(err) {
-        if (err) res.send(err);
-
-        res.json({message: 'Form updated!'});
-      });
-    });
+    );
   })
 
   .delete(function(req, res) {
-    formOpiName = [];
-    async.series([
-      function seriesRemoveTmpl (nextSeries) {
-        Models.fforms.find({ _id: req.params.form_id}, function (err, form) {
-          var pathToTmpl = path.join(__dirname + '/../../public/app/views/formstmpl/'+ form[0].opiName + '.html');
-          fs.unlink(pathToTmpl);
-          console.log(pathToTmpl);
-          nextSeries(null);
-        });
-    }],
-    function seriesRemoveForms (err, results) {
-      Models.fforms
-        .remove({
-        _id: req.params.form_id
-        },
+
+    // Remove a single step with the name as a param
+    Models.steps
+      .remove({
+        page: req.params.step_name
+      },
         function(err, step) {
           if (err) {
             res.send(err)
           }
         res.json({message: 'Successfully deleted'});
-      });
+        }
+      );
+  });
+
+apiRouter.route('/records')
+  .get(function (req,res) {
+
+    // return all the records available
+    Models.records.find(function (err, records) {
+      if (err) {
+        return res.send(err)
+      }
+      res.json(records)
     });
+  })
+
+  .post(function (req, res) {
+
+    // Instantiate records model,
+    // grab values from request
+    var record = new Models.records();
+    record.opiName = req.body.opiName;
+    arrAnswers = req.body.answers.split(',');
+    for (i = 0; i < arrAnswers.length; i++) {
+      record.answers.push(arrAnswers[i]);
+          console.log(i);
+    }
+    
+    record.starSelected = req.body.starSelected;
+    record.freeText = req.body.freeText;
+
+
+    record.save(function(err) {
+      if (err) {
+        return res.send(err)
+      }
+      console.log('Form data recorded!');
+      var pathToTmpl = path.join(__dirname + '/../../public/app/views/formstmpl/form.exito.tpl.html');
+      res.sendFile(pathToTmpl);
+    });
+    
   });
 
 apiRouter.route('/opi/:opi_name')
@@ -243,6 +287,15 @@ apiRouter.route('/opi/:opi_name')
     res.sendFile(pathToTmpl);
   });
 
-	return apiRouter;
-}
+/* Simple log, number of connections to api */
+var init = 1;
+var date = new Date();
+apiRouter.use(function(req, res, next) {
+  console.log('» ' + init + ' connections to endpoint /api/* » ' + date)
+  init++;
+  next();
+});
 
+return apiRouter;
+}
+})();
