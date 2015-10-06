@@ -18,8 +18,8 @@ var express     = require('express'),
 // https://github.com/mongolab/mongodb-driver-examples/blob/master/nodejs/mongooseSimpleExample.js
 
 // Connect to the db
-// mongoose.connect(config.database);
-mongoose.connect('mongodb://127.0.0.1:27017/feedbackdbdemo');
+mongoose.connect(config.database);
+//mongoose.connect('mongodb://127.0.0.1:27017/feedbackdbdemo');
 
 
 // APP CONFIGURATION ----------------------
@@ -45,11 +45,11 @@ app.use(express.static(__dirname + '/public'));
 // ========================================
 // basic route for the home page
 app.get('/', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/app/login.html'))
+  res.sendFile(path.join(__dirname + '/public/app/login.html'));
 });
 
 app.get('/home', function(req, res) {
-  res.sendFile(path.join(__dirname + '/public/app/home.html'))
+  res.sendFile(path.join(__dirname + '/public/app/home.html'));
 });
 
 var apiRoutes = require('./app/routes/api')(app, express);

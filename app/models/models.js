@@ -12,8 +12,7 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
 		urlPullButton: { type: String, default: null },
 		urlWidget: { type: String, default: null },
 		starSelected: { type: Number, min: 1, max: 5, default: null },
-
-		questions: [String],
+		questions: String,
 		saturation: { type: Number, min: 0, max: 30,  select: false , default: 30 },
 		randomness: { type: Number, min: 0, max: 100, default: 100, select: false }
 
@@ -29,12 +28,20 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
   }),
 
   PasoSchema = new Schema({
-		page: { type: String, required: true, lowercase: true, index: { unique: true }},
+		page: { type: String, required: true, lowercase: true, index: { unique: true } },
 		newPage: String,
 		forms: []
+  }),
+
+  UserSchema = new Schema({
+		id: { type: String, required: true, lowercase: true, index: { unique: true } },
+		pwd: { type: String, required: true },
+		name: { type: String, required: true }
   });
 
 module.exports.steps = mongoose.model('OpPaso', PasoSchema);
 module.exports.records = mongoose.model('OpRecord', RecordSchema);
 module.exports.fforms = mongoose.model('OpForm', FormSchema);
+module.exports.users = mongoose.model('OpUser', UserSchema);
+
 })();

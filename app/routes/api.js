@@ -15,6 +15,20 @@ apiRouter.get('/', function(req,res) {
   res.json({ message: 'welcome to our API!'});
 });
 
+apiRouter.route('/loginAuth')
+  .get(function(req, res) {
+
+    // Return one form
+    Models.users
+      .findOne({ id: req.params.username, pwd: req.params.userpass}, function (err, user) {
+        if (err) {
+          res.send(err);
+        }
+        res.json(user);
+      });
+
+  })
+
 apiRouter.route('/forms')
   .post(function(req, res) {
 
