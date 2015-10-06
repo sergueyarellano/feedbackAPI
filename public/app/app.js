@@ -40,7 +40,7 @@
         // body...
         var data = {};
         data.opiName = vm.fdata.name;
-        data.text = vm.fdata.q1 + ',' + vm.fdata.q2;
+        data.text = vm.fdata.q0 + ',' + vm.fdata.q1 + ',' + vm.fdata.q2;
         return $http.post('api/forms', data)
           .then(function(response){
               console.log(response);
@@ -52,6 +52,20 @@
             console.error('API error', response.status, response.data);
             })
       }
+    }])
+
+    .controller('ShowOpinionesController', ['$http',  function($http) {
+      // bind this to vm (view-model)
+      var vm = this;
+      vm.getOpiniones = function () {
+        // body...
+        return $http.get('api/records')
+          .then(function(response){
+              vm.formularios = response.data;
+            })
+
+      }
+
     }])
 
     .config(['$routeProvider', '$locationProvider',function($routeProvider, $locationProvider) {
@@ -68,6 +82,11 @@
             templateUrl: 'app/views/list.forms.tpl.html',
             controller: 'ShowFormsController',
             controllerAs: 'sfc'
+          })
+          .when('/showOpiniones', {
+            templateUrl: 'app/views/list.opiniones.tpl.html',
+            controller: 'ShowOpinionesController',
+            controllerAs: 'soc'
           })
           .otherwise({
             templateUrl: 'app/views/404.tpl.html'

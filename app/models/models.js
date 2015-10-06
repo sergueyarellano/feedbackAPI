@@ -20,10 +20,12 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
   }),
 
   RecordSchema = new Schema({
-  	opiName: { type: String, required: true, lowercase: true, index: { unique: true } },
-		answers: [{ type: String, required: true, lowercase: true }],
-		starSelected: { type: Number, min: 1, max: 5, default: null },
-		freeText: { type: String, lowercase: true }
+  	opiName: { type: String, required: true, lowercase: true },
+		answer: { type: String, lowercase: true },
+		starSelected: { type: String, lowercase: true, default: null },
+		freeText: { type: String, lowercase: true },
+		channel: { type: String, lowercase: true },
+		segmento: { type: String }
   }),
 
   PasoSchema = new Schema({

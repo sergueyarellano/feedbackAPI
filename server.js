@@ -19,7 +19,7 @@ var express     = require('express'),
 
 // Connect to the db
 // mongoose.connect(config.database);
-mongoose.connect('mongodb://127.0.0.1:27017/feedbackdb');
+mongoose.connect('mongodb://127.0.0.1:27017/feedbackdbdemo');
 
 
 // APP CONFIGURATION ----------------------

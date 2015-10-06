@@ -75,6 +75,7 @@
       }
       .question-input-stars [type='radio'] {
         display: none;
+        margin: 0 auto;
       }
 
       .multiple-choices-list {
@@ -119,15 +120,19 @@
         color: blue;
       }
 
-      .start-text {
+      .star-text {
         float: right;
-        margin-right: 10px;
-        margin-top: 15px;
-        margin-left: 10px;
         font-size: 15px;
         font-weight: bold;
         min-height: 20px;
+        margin: 15px 190px 10px 0;
+        clear: both;
       }
+
+      .select {
+        color: green;
+      }
+        
 
       button.btn {
         position: relative;
@@ -157,76 +162,92 @@
   </head>
   <body>
     <div id="main">
-      <form id="form1" class="innerform" role="form" method="post" action="/api/submit">
+      <form id="form1" class="innerform" role="form" method="post" action="/api/records">
         <div class="top-data">
           <div class="logo">
               <i class="fa fa-comments-o fa-5x"></i>
           </div>
           <br>
-          Acabas de abandonar la compra de acciones.
+          Acaba de abandonar la operativa de traspaso efectivo
           <br>
           Nos gustaría conocer tu opinión.
         </div>
         <div class="qualifier question-text-description">
           <label for="117863">
-            <div>​¿Desea valorar el gestor?</div>
+            <div>​Valore la experiencia del proceso</div>
           </label>
         </div>
+        <div class="star-text"></div>
         <div style="clear:left"></div>
+
         <div class="question-input-stars">
-          <script>
+          <script> 
+            $(document).ready(function(){
               var _opinator_5stars = _opinator_5stars || {};
-              _opinator_5stars["question-117863"] = {"1":{"position":1,"tag":"Muy mal"},"2":{"position":2,"tag":"Mal"},"3":{"position":3,"tag":"Normal"},"4":{"position":4,"tag":"Bien"},"5":{"position":5,"tag":"Excelente"}};
-              $(document).ready(function(){
-                $(".fa-star").hover(function() {
-                  $(".star-text").text(_opinator_5stars["question-117863"]["2"].tag);
-                });
+              _opinator_5stars = {"1":{"position":1,"tag":"Muy mal"},"2":{"position":2,"tag":"Mal"},"3":{"position":3,"tag":"Normal"},"4":{"position":4,"tag":"Bien"},"5":{"position":5,"tag":"Excelente"}};
+             
+
+
+              $(".star").click(function() {
+                $(this).find('input').attr('checked', 'checked');
               });
+              $(".star").hover(function() {
+              
+                $(this).prevAll().addClass('select');
+                $(this).nextAll().removeClass('select');
+                $(this).addClass('select');
+                var choice = $(this).find('input').attr('value');
+                console.log(choice);
+                $(".star-text").text(_opinator_5stars[choice].tag);
+              });
+            });
           </script>
-          <div class="star-text"></div>
-          <div id="stars-117863" class="stars stars5 required">
+          <div id="q1" class="stars stars5 required">
             <div class="star">
               <i class="fa fa-star"></i>
-                <input type="radio" name="117863" value="1"/>
+                <input type="radio" name="starSelected" value="1"/>
             </div>
             <div class="star">
               <i class="fa fa-star"></i>
-                <input type="radio" name="117863" value="2"/>
+                <input type="radio" name="starSelected" value="2"/>
             </div>
             <div class="star">
               <i class="fa fa-star"></i>
-                <input type="radio" name="117863" value="3"/>
+                <input type="radio" name="starSelected" value="3"/>
             </div>
             <div class="star">
               <i class="fa fa-star"></i>
-                <input type="radio" name="117863" value="4"/>
+                <input type="radio" name="starSelected" value="4"/>
             </div>
             <div class="star">
               <i class="fa fa-star"></i>
-                <input type="radio" name="117863" value="5"/>
+                <input type="radio" name="starSelected" value="5"/>
             </div>
           </div>
-        </div>
+
+
+      </div>
         <div style="clear:left"></div>
         <div class="question-separator" />
         <div class="question-text-description">
           <label for="117865">
-              <p>​ ¿Algo más?</p>
+              <p>​¿Algún comentario más?</p>
           </label>
         </div>
         <div style="clear:left"></div>
         <div class="multiple-choices-list">
           <div class="multiple-entry">
-            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-1" name="117865" value="1" />
+            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-1" name="answer" value="No es sencillo" />
             <div class="multiplechoice-text">No es sencillo<br></div>
           </div>
           <div class="multiple-entry">
-            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-2" name="117865" value="2" />
+            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-2" name="answer" value="No es agil" />
             <div class="multiplechoice-text">No es ágil<br></div>
           </div>
           <div class="multiple-entry">
-            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-3" name="117865" value="3" />
+            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-3" name="answer" value="No tengo suficiente informacion" />
             <div class="multiplechoice-text">No tengo suficiente información<br></div>
+
           </div>
         </div>
         <div style="clear:left"></div>
@@ -234,11 +255,12 @@
         <div class="question-freetext">
           <div style="clear:left"></div>
           <div class="freetext text-area">
-            <textarea placeholder="¿Quieres comentarnos algo más sobre el proceso?" maxlength="5000"></textarea>
+            <textarea placeholder="¿Quieres comentarnos algo más sobre el proceso?" maxlength="5000" name="freeText"></textarea>
           </div>
         </div>
         <button class="btn" type="submit">Enviar</button>
       </form>
     </div>
+
   </body>
 </html>

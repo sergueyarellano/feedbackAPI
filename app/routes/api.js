@@ -59,7 +59,7 @@ apiRouter.route('/forms')
               console.log(i);
               var pattern = new RegExp("regExpQ" + i);
               var result = data.replace(pattern, fform.questions[i]);
-              console.log(result);
+
               
               fs.writeFileSync(pathToTmpl, result, 'utf8', function (err) {
                 if (err) {
@@ -213,7 +213,7 @@ apiRouter.route('/steps/:step_name')
       }
     ],
       function endSeries(err, results) {
-        console.log(results[0][1]);
+
        results[0][0].forms.push(results[1][0]);
 
        results[0][0].save(function(err) {
@@ -256,19 +256,22 @@ apiRouter.route('/records')
 
   .post(function (req, res) {
 
+    var referer = req.headers['referer'].split('?');
+    var referer1 = referer[1].split('&');
+    var referer2 = referer[0].split('/');
+    var opiName = referer2[5];
+
     // Instantiate records model,
     // grab values from request
     var record = new Models.records();
-    record.opiName = req.body.opiName;
-    arrAnswers = req.body.answers.split(',');
-    for (i = 0; i < arrAnswers.length; i++) {
-      record.answers.push(arrAnswers[i]);
-          console.log(i);
-    }
-    
+    record.opiName = opiName;
+    record.answer = req.body.answer;
     record.starSelected = req.body.starSelected;
     record.freeText = req.body.freeText;
-
+    var channel = referer1[3].split('=');
+    var segmento = referer1[6].split('=');
+    record.channel = channel[1];
+    record.segmento = segmento[1];
 
     record.save(function(err) {
       if (err) {
@@ -277,8 +280,22 @@ apiRouter.route('/records')
       console.log('Form data recorded!');
       var pathToTmpl = path.join(__dirname + '/../../public/app/views/formstmpl/form.exito.tpl.html');
       res.sendFile(pathToTmpl);
-    });
+    });  
     
+  })
+
+  .delete(function (req, res) {
+
+    // Remove all the records step with the name as a param
+    Models.records
+      .remove(
+        function(err, step) {
+          if (err) {
+            res.send(err)
+          }
+        res.json({message: 'Successfully deleted'});
+        }
+      );
   });
 
 apiRouter.route('/opi/:opi_name')
