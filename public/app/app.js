@@ -42,6 +42,7 @@
         var data = {};
         data.opiName = vm.fdata.name;
         data.text = vm.fdata.q0 + ',' + vm.fdata.q1 + ',' + vm.fdata.q2;
+        data.randomness = vm.fdata.aleatoriedad;
         return $http.post('api/forms', data)
           .then(function(response) {
               $('.modal-body').find('p').text(response.data.message);
@@ -49,7 +50,8 @@
               $('#form1').get(0).reset();
             })
           .catch(function(response) {
-            $('.modal-text').text(response.data.message);
+            $('.modal-body').find('p').text(response.data.message);
+            console.log(response.data.message);
             });
       };
     }])
@@ -57,7 +59,7 @@
     .controller('ShowOpinionesController', [ '$http',  function($http) {
       // bind this to vm (view-model)
       var vm = this;
-      
+
       return $http.get('api/records')
         .then(function(response) {
           vm.records = response.data;
