@@ -38,8 +38,9 @@ apiRouter.route('/forms')
     fform.opiName = req.body.opiName;
     fform.url = "//localhost:3000/api/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
     fform.urlPullButton = "//localhost:3000/api/opi/" + req.body.opiName + "\?carry_formulario="+ req.body.opiName + "&carry_lang=en&lang=en&carry_channel=net_web";
-
+    fform.randomness = req.body.randomness;
     var text = req.body.text.split(',');
+    console.log(req.body.text);
     for (var i = 0;i< text.length;i++) {
       fform.questions.push(text[i]);
     }

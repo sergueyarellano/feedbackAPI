@@ -23,15 +23,17 @@
       };
     })
 
-    .controller('ShowFormsController', [ '$http',  function($http) {
+    .controller('ShowFormsController', function($http) {
       // bind this to vm (view-model)
       var vm = this;
-      return $http.get('api/forms')
-        .then(function(response) {
-            console.log(response);
-            vm.formularios = response.data;
+      
+     $http.get('api/forms')
+        .success(function(data) {
+          console.log(data);
+          vm.formularios = data;
+          console.log(vm.formularios.length);
         });
-    }])
+    })
 
     .controller('CreateFormController', [ '$http', function($http) {
 
@@ -61,8 +63,8 @@
       var vm = this;
 
       return $http.get('api/records')
-        .then(function(response) {
-          vm.records = response.data;
+        .success(function(data) {
+          vm.records = data;
         });
 
     }])

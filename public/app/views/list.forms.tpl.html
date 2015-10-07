@@ -3,7 +3,7 @@
     <div class="row">
       <div class="col-md-8">
           <h3>Lista de formularios</h3>
-          <table class="table-responsive table-striped">
+          <table class="table-responsive table-striped" ng-show="sfc.formularios">
             <thead>
               <tr>
                 <th>Nombre</th>
@@ -15,6 +15,7 @@
               </tr>
             </thead>
             <tbody>
+
               <tr ng-repeat="f in sfc.formularios">
                 <td>{{f.opiName}}</td>
                 <td>{{f.url}}</td>

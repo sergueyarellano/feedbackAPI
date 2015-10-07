@@ -12,9 +12,9 @@ var mongoose  = require('mongoose'), // if problems with mongo 2.6 remove, and i
 		urlPullButton: { type: String, default: null },
 		urlWidget: { type: String, default: null },
 		starSelected: { type: Number, min: 1, max: 5, default: null },
-		questions: String,
+		questions: [String],
 		saturation: { type: Number, min: 0, max: 30,  select: false , default: 30 },
-		randomness: { type: Number, min: 0, max: 100, default: 100, select: false }
+		randomness: { type: Number, min: 0, max: 100, default: 100}
 
   }),
 
