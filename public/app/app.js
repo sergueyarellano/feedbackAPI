@@ -62,7 +62,7 @@
       // bind this to vm (view-model)
       var vm = this;
 
-      return $http.get('api/records')
+      $http.get('api/records')
         .success(function(data) {
           vm.records = data;
         });
