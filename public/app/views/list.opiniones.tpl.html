@@ -1,0 +1,33 @@
+<div class="content-wrapper">
+  <section class="content">
+    <div class="row">
+      <div class="col-md-8">
+          <h3>Todas las opiniones</h3>
+          <table class="table table-responsive text-center" ng-show="soc.records">
+            <thead>
+              <tr>
+                <th>ID User</th>
+                <th>Formulario</th>
+                <th>Valoracion</th>
+                <th>Canal</th>
+                <th>Segmento</th>
+                <th>Comentario</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="r in soc.records">
+                <td>u00000</td>
+                <td>{{r.opiName}}</td>
+                <td>{{r.starSelected}}&nbsp;<i class="fa fa-star" style="width: 25px;height: 25px;color: #FFB800;"></i></td>
+                <td>{{r.channel}}</td>
+                <td>{{r.segmento}}</td>
+                <td>{{r.freeText}}</td>
+                <td><a target="_blank" class="btn btn-success btn-xs" role="button"><i class="fa fa-eye"></i>Ver</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+  </section>
+</div>

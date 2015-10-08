@@ -1,0 +1,106 @@
+<script src="../../../assets/libs/Chart.js/Chart.min.js"></script>
+<script src="../../../assets/libs/flot/jquery.flot.min.js"></script>
+
+<div class="content-wrapper">
+  <!-- Content Header (Page header) -->
+  <section class="content-header">
+    <h1>
+      Panel de control
+    </h1>
+  </section>
+
+  <!-- Main content -->
+  <section class="content">
+    <!-- Your Page Content Here -->
+    <div class="row">
+      <div class="col-md-12">
+        <div class="box">
+          <div class="box-header with-border">
+            <h3 class="box-title">Ultima semana</h3>
+            <div class="box-tools pull-right">
+              <button class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+              <div class="btn-group">
+                <button class="btn btn-box-tool dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i></button>
+                <ul class="dropdown-menu" role="menu">
+                  <li><a href="#">Ultimo mes</a></li>
+                  <li><a href="#">Ultimo año</a></li>
+                  <li><a href="#">Seleccionar fechas</a></li>
+                  <li class="divider"></li>
+                  <li><a href="#">Separated link</a></li>
+                </ul>
+              </div>
+              <button class="btn btn-box-tool" data-widget="remove"><i class="fa fa-times"></i></button>
+            </div>
+          </div><!-- /.box-header -->
+          <div class="box-body">
+            <div class="row">
+              <div class="col-md-8">
+                <p class="text-center">
+                  <strong>Sales: 1 Jan, 2014 - 30 Jul, 2014</strong>
+                </p>
+                <div class="chart">
+                  <!-- Sales Chart Canvas -->
+                  <canvas id="salesChart" style="height: 180px;"></canvas>
+                  <script src="../../../assets/js/statistics.js"></script>
+                </div><!-- /.chart-responsive -->
+              </div><!-- /.col -->
+              <div class="col-md-4">
+                <p class="text-center">
+                  <strong>Goal Completion</strong>
+                </p>
+                <div class="progress-group">
+                  <span class="progress-text">Seguros</span>
+                  <span class="progress-number"><b>160</b>/200</span>
+                  <div class="progress sm">
+                    <div class="progress-bar progress-bar-aqua" style="width: 80%"></div>
+                  </div>
+                </div><!-- /.progress-group -->
+                <div class="progress-group">
+                  <span class="progress-text">Transferencias</span>
+                  <span class="progress-number"><b>310</b>/400</span>
+                  <div class="progress sm">
+                    <div class="progress-bar progress-bar-red" style="width: 80%"></div>
+                  </div>
+                </div><!-- /.progress-group -->
+                <div class="progress-group">
+                  <span class="progress-text">Mi gestor</span>
+                  <span class="progress-number"><b>480</b>/800</span>
+                  <div class="progress sm">
+                    <div class="progress-bar progress-bar-green" style="width: 80%"></div>
+                  </div>
+                </div><!-- /.progress-group -->
+                <div class="progress-group">
+                  <span class="progress-text">Valores</span>
+                  <span class="progress-number"><b>250</b>/500</span>
+                  <div class="progress sm">
+                    <div class="progress-bar progress-bar-yellow" style="width: 80%"></div>
+                  </div>
+                </div><!-- /.progress-group -->
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+          </div><!-- ./box-body -->
+          <div class="box-footer">
+            <div class="row">
+              <div class="col-sm-3 col-xs-6">
+                <div class="description-block border-right">
+                  <span class="description-percentage text-green"><i class="fa fa-caret-up"></i> 17%</span>
+                  <h5 class="description-header">3512</h5>
+                  <span class="description-text">OPINIONES TOTALES</span>
+                </div><!-- /.description-block -->
+              </div><!-- /.col -->
+              <div class="col-sm-3 col-xs-6">
+                <div class="description-block border-right">
+                  <span class="description-percentage text-yellow"><i class="fa fa-caret-left"></i> 0%</span>
+                  <h5 class="description-header">500</h5>
+                  <span class="description-text">OPINIONES MES ACTUAL</span>
+                </div><!-- /.description-block -->
+              </div><!-- /.col -->
+            </div><!-- /.row -->
+          </div><!-- /.box-footer -->
+        </div><!-- /.box -->
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </section><!-- /.content -->
+</div><!-- /.content-wrapper -->
+
+

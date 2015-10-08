@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="author" content="BBVA">
+    <title>nombre del formulario</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <style>
+
+      body {
+        max-width: 100%;
+        font-size: 14px;
+        font-weight: 300;
+        font-family: Tahoma,Geneva,sans-serif;
+        line-height: 1.5;
+        white-space: normal;
+        word-break: normal;
+      }
+
+      div#main {
+        background-color:white;
+        color:#0078d2;
+        font-size: 17px;
+        min-height: 100%;
+        clear: both;
+        border: 1px solid #009EE5;
+        padding: 10px 20px;
+        width: 480px;
+        border-radius: 15px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+      }
+      
+      .top-data {
+        overflow: hidden;
+        clear: both;
+      }
+
+      .logo {
+        float: left;
+        margin: 2px 10px 10px 0px;
+      }
+
+      .question-separator {
+        border-top: 1px dotted #009EE5;
+        border-bottom: 0px none;
+        margin-bottom: 0px;
+        margin-top: 5px;
+        padding-top: 2px;
+        padding-bottom: 2px;
+        overflow: hidden;
+        clear: both;
+      }
+
+      .qualifier label {
+        font-weight: normal;
+      }
+
+      .question-title {
+        display: inline-block;
+        float: right;
+      }
+      .star,.trash {
+        color:rgb(194, 186, 186);
+        width: 40px;
+        font-size: 32px;
+        float:left;
+        cursor: pointer;
+      }
+      .question-text-description, .question-input-handlers{
+        float:left;
+      }
+      .question-input-stars [type='radio'] {
+        display: none;
+        margin: 0 auto;
+      }
+
+      .multiple-choices-list {
+        margin-top: 10px;
+        overflow: visible;
+        clear: left;
+      }
+
+      .multiplechoice-entry {
+        margin-bottom: 4px;
+      }
+
+      .multiplechoice-text {
+        display: inline;
+      }
+
+      .freetext {
+        position: relative;
+      }
+
+      .freetext textarea {
+        border-radius: 0px;
+        border-color: #0078D2;
+        color: #999;
+        opacity: 1;
+        font-size: 16px;
+        height: 60px;
+        resize: vertical;
+        max-height: 300px;
+        min-height: 60px;
+        overflow: auto;
+        width: 450px;
+        margin-top: 16px;
+        margin-right: 16px;
+        padding: 6px 12px;
+        border: 1px solid #CCC;
+        display: block;
+
+      }
+
+      i.fa-star:hover {
+        color: blue;
+      }
+
+      .star-text {
+        float: right;
+        font-size: 15px;
+        font-weight: bold;
+        min-height: 20px;
+        margin: 15px 190px 10px 0;
+        clear: both;
+      }
+
+      .select {
+        color: green;
+      }
+        
+
+      button.btn {
+        position: relative;
+        background-color: blue;
+        overflow: visible;
+        color: white;
+        text-transform: none;
+        padding-top: 8px
+        font-size: 18px;
+        line-height: 1.33;
+        border-radius: 6px;
+        font-weight: 400;
+        font-size: 18px;
+        margin: 12px;
+        white-space: nowrap;
+        vertical-align: middle;
+        cursor: pointer;
+        -moz-user-select: none;
+        text-align: center;
+        width: 80px;
+        height: 40px !important;
+        border: 0px none;
+        float: right;
+      }
+      </style>
+      <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  </head>
+  <body>
+    <div id="main">
+      <form id="form1" class="innerform" role="form" method="post" action="/api/records">
+        <div class="top-data">
+          <div class="logo">
+              <i class="fa fa-comments-o fa-5x"></i>
+          </div>
+          <br>
+          Acaba de abandonar la operativa de financiación adeudo
+          <br>
+          Nos gustaría conocer tu opinión.
+        </div>
+        <div class="qualifier question-text-description">
+          <label for="117863">
+            <div>​Valore la experiencia del proceso</div>
+          </label>
+        </div>
+        <div class="star-text"></div>
+        <div style="clear:left"></div>
+
+        <div class="question-input-stars">
+          <script> 
+            $(document).ready(function(){
+              var _opinator_5stars = _opinator_5stars || {};
+              _opinator_5stars = {"1":{"position":1,"tag":"Muy mal"},"2":{"position":2,"tag":"Mal"},"3":{"position":3,"tag":"Normal"},"4":{"position":4,"tag":"Bien"},"5":{"position":5,"tag":"Excelente"}};
+             
+
+
+              $(".star").click(function() {
+                $(this).find('input').attr('checked', 'checked');
+              });
+              $(".star").hover(function() {
+              
+                $(this).prevAll().addClass('select');
+                $(this).nextAll().removeClass('select');
+                $(this).addClass('select');
+                var choice = $(this).find('input').attr('value');
+                console.log(choice);
+                $(".star-text").text(_opinator_5stars[choice].tag);
+              });
+            });
+          </script>
+          <div id="q1" class="stars stars5 required">
+            <div class="star">
+              <i class="fa fa-star"></i>
+                <input type="radio" name="starSelected" value="1"/>
+            </div>
+            <div class="star">
+              <i class="fa fa-star"></i>
+                <input type="radio" name="starSelected" value="2"/>
+            </div>
+            <div class="star">
+              <i class="fa fa-star"></i>
+                <input type="radio" name="starSelected" value="3"/>
+            </div>
+            <div class="star">
+              <i class="fa fa-star"></i>
+                <input type="radio" name="starSelected" value="4"/>
+            </div>
+            <div class="star">
+              <i class="fa fa-star"></i>
+                <input type="radio" name="starSelected" value="5"/>
+            </div>
+          </div>
+
+
+      </div>
+        <div style="clear:left"></div>
+        <div class="question-separator" />
+        <div class="question-text-description">
+          <label for="117865">
+              <p>​¿Algún comentario más?</p>
+          </label>
+        </div>
+        <div style="clear:left"></div>
+        <div class="multiple-choices-list">
+          <div class="multiple-entry">
+            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-1" name="answer" value="No es sencillo" />
+            <div class="multiplechoice-text">No es sencillo<br></div>
+          </div>
+          <div class="multiple-entry">
+            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-2" name="answer" value="No es agil" />
+            <div class="multiplechoice-text">No es ágil<br></div>
+          </div>
+          <div class="multiple-entry">
+            <input class="input-hidden input-custom-image" data-text="No es sencillo" type="radio" id="question-input-117865-3" name="answer" value="No tengo suficiente informacion" />
+            <div class="multiplechoice-text">No tengo suficiente información<br></div>
+
+          </div>
+        </div>
+        <div style="clear:left"></div>
+        <div class="question-separator" />
+        <div class="question-freetext">
+          <div style="clear:left"></div>
+          <div class="freetext text-area">
+            <textarea placeholder="¿Quieres comentarnos algo más sobre el proceso?" maxlength="5000" name="freeText"></textarea>
+          </div>
+        </div>
+        <button class="btn" type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </body>
+</html>
